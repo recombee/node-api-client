@@ -1,0 +1,108 @@
+/*
+ This file is auto-generated, do not edit
+*/
+
+'use strict'
+var chai = require('chai').assert;
+var recombee = require('./../index.js');
+var rqs = recombee.requests;
+
+var env = require('./set-environment.js');
+
+describe('AddCartAddition', function(){
+  this.timeout(150000);
+
+  before(function(done){
+
+    env.setEnvironment()
+    .then(()=> {
+      done();
+     });
+  });
+  
+  it ('does not fail with cascadeCreate', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddCartAddition('u_id','i_id',{'cascadeCreate': true});
+    env.client.send(req)
+    .then((res) => {
+      done();
+    });
+  });
+  
+  it ('does not fail with existing item and user', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddCartAddition('entity_id','entity_id');
+    env.client.send(req)
+    .then((res) => {
+      done();
+    });
+  });
+  
+  it ('does not fail with valid timestamp', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddCartAddition('entity_id','entity_id',{'timestamp': '2013-10-29T09:38:41.341Z'});
+    env.client.send(req)
+    .then((res) => {
+      done();
+    });
+  });
+  
+  it ('fails with nonexisting item id', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddCartAddition('entity_id','nonex_id');
+    env.client.send(req)
+    .then((res) => {
+      chai.fail();
+      done();
+    })
+    .catch(recombee.errors.ResponseError,(err) => {
+      chai.equal(err.statusCode, 404);
+      done();
+    });
+  });
+  
+  it ('fails with nonexisting user id', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddCartAddition('nonex_id','entity_id');
+    env.client.send(req)
+    .then((res) => {
+      chai.fail();
+      done();
+    })
+    .catch(recombee.errors.ResponseError,(err) => {
+      chai.equal(err.statusCode, 404);
+      done();
+    });
+  });
+  
+  it ('fails with invalid time', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddCartAddition('entity_id','entity_id',{'timestamp': -15});
+    env.client.send(req)
+    .then((res) => {
+      chai.fail();
+      done();
+    })
+    .catch(recombee.errors.ResponseError,(err) => {
+      chai.equal(err.statusCode, 400);
+      done();
+    });
+  });
+  
+  it ('really stores interaction to the system', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddCartAddition('u_id2','i_id2',{'cascadeCreate': true,'timestamp': 5});
+    env.client.send(req)
+    .then((res) => {
+      env.client.send(req)
+      .then((res) => {
+        chai.fail();
+        done();
+      })
+      .catch(recombee.errors.ResponseError,(err) => {
+        chai.equal(err.statusCode, 409);
+        done();
+      });
+    });
+  });
+});
