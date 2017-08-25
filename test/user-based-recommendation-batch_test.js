@@ -23,7 +23,8 @@ describe('UserBasedRecommendation', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.UserBasedRecommendation('entity_id',9),
-      new rqs.UserBasedRecommendation('nonexisting',9,{'cascadeCreate': true})
+      new rqs.UserBasedRecommendation('nonexisting',9,{'cascadeCreate': true}),
+      new rqs.UserBasedRecommendation('nonexisting2',9,{'cascadeCreate': true,'expertSettings': {}})
     ];
 
     env.client.send(new rqs.Batch(requests))
@@ -32,6 +33,8 @@ describe('UserBasedRecommendation', function(){
       chai.equal(responses[0].json.length, 9);
       chai.equal(responses[1].code, 200);
       chai.equal(responses[1].json.length, 9);
+      chai.equal(responses[2].code, 200);
+      chai.equal(responses[2].json.length, 9);
       done();
     });
   });

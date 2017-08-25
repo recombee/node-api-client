@@ -33,4 +33,18 @@ describe('ListUsers', function(){
       }
     }));
   });
+  
+  it ('return properties', (done) => {
+    let req, req2, resp;
+    req = new rqs.ListUsers();
+    env.client.send(req,((err,res) => {
+      if(err) {
+        chai.fail();
+      }
+      else {
+        chai.equal(res.length, 1);
+        done();
+      }
+    }));
+  });
 });

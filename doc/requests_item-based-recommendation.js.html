@@ -35,12 +35,13 @@ const rqs = require("./request");
 
 /**
  * Recommends set of items that are somehow related to one given item, *X*. Typical scenario for using item-based recommendation is when user *A* is viewing *X*. Then you may display items to the user that he might be also interested in. Item-recommendation request gives you Top-N such items, optionally taking the target user *A* into account.
+ *  It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
  */
 class ItemBasedRecommendation extends rqs.Request {
 
   /**
    * Construct the request
-   * @param {string} itemId - ID of the item recommendations for which are to be generated.
+   * @param {string} itemId - ID of the item for which the recommendations are to be generated.
    * @param {number} count - Number of items to be recommended (N for the top-N recommendation).
    * @param {Object} optional - Optional parameters given as an object with structure name of the parameter: value
    * - Allowed parameters:
@@ -122,9 +123,12 @@ class ItemBasedRecommendation extends rqs.Request {
    *     - *rotationTime*
    *         - Type: number
    *         - Description: **Expert option** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long time it takes to an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized.
+   *     - *expertSettings*
+   *         - Type: 
+   *         - Description: Dictionary of custom options.
    */
   constructor(itemId, count, optional) {
-    super('GET', `/items/${itemId}/recomms/`, 3000, false);
+    super('POST', `/items/${itemId}/recomms/`, 3000, false);
     this.itemId = itemId;
     this.count = count;
     optional = optional || {};
@@ -141,6 +145,7 @@ class ItemBasedRecommendation extends rqs.Request {
     this.minRelevance = optional.minRelevance;
     this.rotationRate = optional.rotationRate;
     this.rotationTime = optional.rotationTime;
+    this.expertSettings = optional.expertSettings;
   }
 
   /**
@@ -149,6 +154,49 @@ class ItemBasedRecommendation extends rqs.Request {
    */
   bodyParameters() {
     let params = {};
+    params.count = this.count;
+
+    if(this.targetUserId !== undefined)
+      params.targetUserId = this.targetUserId;
+
+    if(this.userImpact !== undefined)
+      params.userImpact = this.userImpact;
+
+    if(this.filter !== undefined)
+      params.filter = this.filter;
+
+    if(this.booster !== undefined)
+      params.booster = this.booster;
+
+    if(this.allowNonexistent !== undefined)
+      params.allowNonexistent = this.allowNonexistent;
+
+    if(this.cascadeCreate !== undefined)
+      params.cascadeCreate = this.cascadeCreate;
+
+    if(this.scenario !== undefined)
+      params.scenario = this.scenario;
+
+    if(this.returnProperties !== undefined)
+      params.returnProperties = this.returnProperties;
+
+    if(this.includedProperties !== undefined)
+      params.includedProperties = this.includedProperties;
+
+    if(this.diversity !== undefined)
+      params.diversity = this.diversity;
+
+    if(this.minRelevance !== undefined)
+      params.minRelevance = this.minRelevance;
+
+    if(this.rotationRate !== undefined)
+      params.rotationRate = this.rotationRate;
+
+    if(this.rotationTime !== undefined)
+      params.rotationTime = this.rotationTime;
+
+    if(this.expertSettings !== undefined)
+      params.expertSettings = this.expertSettings;
 
     return params;
   }
@@ -159,33 +207,6 @@ class ItemBasedRecommendation extends rqs.Request {
    */
   queryParameters() {
     let params = {};
-    params.count = this.count;
-    if (this.targetUserId !== undefined)
-      params.targetUserId = this.targetUserId;
-    if (this.userImpact !== undefined)
-      params.userImpact = this.userImpact;
-    if (this.filter !== undefined)
-      params.filter = this.filter;
-    if (this.booster !== undefined)
-      params.booster = this.booster;
-    if (this.allowNonexistent !== undefined)
-      params.allowNonexistent = this.allowNonexistent;
-    if (this.cascadeCreate !== undefined)
-      params.cascadeCreate = this.cascadeCreate;
-    if (this.scenario !== undefined)
-      params.scenario = this.scenario;
-    if (this.returnProperties !== undefined)
-      params.returnProperties = this.returnProperties;
-    if (this.includedProperties !== undefined)
-      params.includedProperties = this.includedProperties;
-    if (this.diversity !== undefined)
-      params.diversity = this.diversity;
-    if (this.minRelevance !== undefined)
-      params.minRelevance = this.minRelevance;
-    if (this.rotationRate !== undefined)
-      params.rotationRate = this.rotationRate;
-    if (this.rotationTime !== undefined)
-      params.rotationTime = this.rotationTime;
     return params;
   }
 }
@@ -207,7 +228,7 @@ exports.ItemBasedRecommendation = ItemBasedRecommendation
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 29 2017 19:22:20 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Fri Aug 25 2017 15:01:57 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

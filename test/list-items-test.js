@@ -29,4 +29,14 @@ describe('ListItems', function(){
       done();
     });
   });
+  
+  it ('return properties', (done) => {
+    let req, req2, resp;
+    req = new rqs.ListItems();
+    env.client.send(req)
+    .then((res) => {
+      chai.equal(res.length, 1);
+      done();
+    });
+  });
 });

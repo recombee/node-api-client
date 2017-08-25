@@ -21,6 +21,7 @@ describe('ListItems', function(){
   });
   it ('works in batch', (done) => {
     let requests = [
+      new rqs.ListItems(),
       new rqs.ListItems()
     ];
 
@@ -28,6 +29,8 @@ describe('ListItems', function(){
     .then((responses) => {
       chai.equal(responses[0].code, 200);
       chai.deepEqual(['entity_id'], responses[0].json);
+      chai.equal(responses[1].code, 200);
+      chai.equal(responses[1].json.length, 1);
       done();
     });
   });

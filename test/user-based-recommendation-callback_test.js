@@ -48,4 +48,18 @@ describe('UserBasedRecommendation', function(){
       }
     }));
   });
+  
+  it ('recommends with expert settings', (done) => {
+    let req, req2, resp;
+    req = new rqs.UserBasedRecommendation('nonexisting2',9,{'cascadeCreate': true,'expertSettings': {}});
+    env.client.send(req,((err,res) => {
+      if(err) {
+        chai.fail();
+      }
+      else {
+        chai.equal(res.length, 9);
+        done();
+      }
+    }));
+  });
 });

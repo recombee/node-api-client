@@ -28,9 +28,10 @@
 
 <header>
     
-        <h2>ItemBasedRecommendation</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ItemBasedRecommendation<span class="signature">(itemId, count, optional)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Recommends set of items that are somehow related to one given item, *X*. Typical scenario for using item-based recommendation is when user *A* is viewing *X*. Then you may display items to the user that he might be also interested in. Item-recommendation request gives you Top-N such items, optionally taking the target user *A* into account.</div>
+            <div class="class-description">Recommends set of items that are somehow related to one given item, *X*. Typical scenario for using item-based recommendation is when user *A* is viewing *X*. Then you may display items to the user that he might be also interested in. Item-recommendation request gives you Top-N such items, optionally taking the target user *A* into account.
+ It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.</div>
         
     
 </header>
@@ -44,7 +45,9 @@
     <h2>Constructor</h2>
     
 
+    
     <h4 class="name" id="ItemBasedRecommendation"><span class="type-signature"></span>new ItemBasedRecommendation<span class="signature">(itemId, count, optional)</span><span class="type-signature"></span></h4>
+    
 
     
 
@@ -103,7 +106,7 @@
 
             
 
-            <td class="description last">ID of the item recommendations for which are to be generated.</td>
+            <td class="description last">ID of the item for which the recommendations are to be generated.</td>
         </tr>
 
     
@@ -228,7 +231,10 @@ Example response for `includedProperties=description,price`:
         - Description: **Expert option** If the *targetUserId* is provided: If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per-request in backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example `rotationRate=0.2` for only slight rotation of recommended items.
     - *rotationTime*
         - Type: number
-        - Description: **Expert option** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long time it takes to an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized.</td>
+        - Description: **Expert option** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long time it takes to an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized.
+    - *expertSettings*
+        - Type: 
+        - Description: Dictionary of custom options.</td>
         </tr>
 
     
@@ -269,7 +275,7 @@ Example response for `includedProperties=description,price`:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requests_item-based-recommendation.js.html">requests/item-based-recommendation.js</a>, <a href="requests_item-based-recommendation.js.html#line11">line 11</a>
+        <a href="requests_item-based-recommendation.js.html">requests/item-based-recommendation.js</a>, <a href="requests_item-based-recommendation.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -295,6 +301,8 @@ Example response for `includedProperties=description,price`:
 
 
 
+
+
     
     </div>
 
@@ -304,7 +312,9 @@ Example response for `includedProperties=description,price`:
 
     
 
-     
+    
+
+    
 
     
 
@@ -318,7 +328,9 @@ Example response for `includedProperties=description,price`:
 
     
 
+    
     <h4 class="name" id="bodyParameters"><span class="type-signature"></span>bodyParameters<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
 
     
 
@@ -369,7 +381,7 @@ Example response for `includedProperties=description,price`:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requests_item-based-recommendation.js.html">requests/item-based-recommendation.js</a>, <a href="requests_item-based-recommendation.js.html#line122">line 122</a>
+        <a href="requests_item-based-recommendation.js.html">requests/item-based-recommendation.js</a>, <a href="requests_item-based-recommendation.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -417,12 +429,16 @@ Example response for `includedProperties=description,price`:
 
 
 
+
+
         
             
 
     
 
+    
     <h4 class="name" id="queryParameters"><span class="type-signature"></span>queryParameters<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
 
     
 
@@ -473,7 +489,7 @@ Example response for `includedProperties=description,price`:
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requests_item-based-recommendation.js.html">requests/item-based-recommendation.js</a>, <a href="requests_item-based-recommendation.js.html#line132">line 132</a>
+        <a href="requests_item-based-recommendation.js.html">requests/item-based-recommendation.js</a>, <a href="requests_item-based-recommendation.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -521,6 +537,8 @@ Example response for `includedProperties=description,price`:
 
 
 
+
+
         
     
 
@@ -543,7 +561,7 @@ Example response for `includedProperties=description,price`:
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon May 29 2017 19:22:21 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Fri Aug 25 2017 15:01:57 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -40,4 +40,14 @@ describe('ItemBasedRecommendation', function(){
       done();
     });
   });
+  
+  it ('recommends with expert settings', (done) => {
+    let req, req2, resp;
+    req = new rqs.ItemBasedRecommendation('nonexisting2',9,{'cascadeCreate': true,'expertSettings': {}});
+    env.client.send(req)
+    .then((res) => {
+      chai.equal(res.length, 9);
+      done();
+    });
+  });
 });
