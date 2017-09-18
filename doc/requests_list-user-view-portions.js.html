@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: requests/list-user-view-portions.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,61 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: requests/list-user-view-portions.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ This file is auto-generated, do not edit
+*/
 
+'use strict';
+const rqs = require("./request");
 
-    <h3> </h3>
+/**
+ * The view portions feature is currently experimental.
+ * List all the view portions ever submitted by a given user.
+ */
+class ListUserViewPortions extends rqs.Request {
 
+  /**
+   * Construct the request
+   * @param {string} userId - ID of the user whose view portions are to be listed.
+   */
+  constructor(userId) {
+    super('GET', `/users/${userId}/viewportions/`, 100000, false);
+    this.userId = userId;
+  }
 
+  /**
+   * Get body parameters
+   * @return {Object} The values of body parameters (name of parameter: value of the parameter)
+   */
+  bodyParameters() {
+    let params = {};
 
+    return params;
+  }
 
+  /**
+   * Get query parameters
+   * @return {Object} The values of query parameters (name of parameter: value of the parameter)
+   */
+  queryParameters() {
+    let params = {};
+    return params;
+  }
+}
 
-
-
-
-
-
-    
-
-
-
-
-
+exports.ListUserViewPortions = ListUserViewPortions
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: requests/list-item-view-portions.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,61 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: requests/list-item-view-portions.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ This file is auto-generated, do not edit
+*/
 
+'use strict';
+const rqs = require("./request");
 
-    <h3> </h3>
+/**
+ * The view portions feature is currently experimental.
+ * List all the view portions of an item ever submitted by different users.
+ */
+class ListItemViewPortions extends rqs.Request {
 
+  /**
+   * Construct the request
+   * @param {string} itemId - ID of the item of which the view portions are to be listed.
+   */
+  constructor(itemId) {
+    super('GET', `/items/${itemId}/viewportions/`, 100000, false);
+    this.itemId = itemId;
+  }
 
+  /**
+   * Get body parameters
+   * @return {Object} The values of body parameters (name of parameter: value of the parameter)
+   */
+  bodyParameters() {
+    let params = {};
 
+    return params;
+  }
 
+  /**
+   * Get query parameters
+   * @return {Object} The values of query parameters (name of parameter: value of the parameter)
+   */
+  queryParameters() {
+    let params = {};
+    return params;
+  }
+}
 
-
-
-
-
-
-    
-
-
-
-
-
+exports.ListItemViewPortions = ListItemViewPortions
+</code></pre>
+        </article>
+    </section>
 
 
 

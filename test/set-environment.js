@@ -35,7 +35,8 @@ var setInteractions = (() => {
       new rqs.AddPurchase('user', 'item', {'timestamp': 0}),
       new rqs.AddRating('user', 'item', -1, {'timestamp': 0}),
       new rqs.AddCartAddition('user', 'item', {'timestamp': 0}),
-      new rqs.AddBookmark('user', 'item', {'timestamp': 0})
+      new rqs.AddBookmark('user', 'item', {'timestamp': 0}),
+      new rqs.SetViewPortion('user', 'item',1, {'timestamp': 0})
   ]);
 
   return client.send(requests);
