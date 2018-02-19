@@ -23,7 +23,7 @@ describe('DeleteItem', function(){
     let requests = [
       new rqs.DeleteItem('entity_id'),
       new rqs.DeleteItem('entity_id'),
-      new rqs.DeleteItem('...not_valid...'),
+      new rqs.DeleteItem('$$$not_valid$$$'),
       new rqs.DeleteItem('valid_id')
     ];
 

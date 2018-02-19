@@ -22,7 +22,7 @@ describe('AddUser', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.AddUser('valid_id'),
-      new rqs.AddUser('...not_valid...'),
+      new rqs.AddUser('$$$not_valid$$$'),
       new rqs.AddUser('valid_id2'),
       new rqs.AddUser('valid_id2')
     ];

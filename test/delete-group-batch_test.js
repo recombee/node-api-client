@@ -23,7 +23,7 @@ describe('DeleteGroup', function(){
     let requests = [
       new rqs.DeleteGroup('entity_id'),
       new rqs.DeleteGroup('entity_id'),
-      new rqs.DeleteGroup('...not_valid...'),
+      new rqs.DeleteGroup('$$$not_valid$$$'),
       new rqs.DeleteGroup('valid_id')
     ];
 

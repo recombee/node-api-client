@@ -44,7 +44,7 @@ describe('DeleteUserProperty', function(){
   
   it ('fails with invalid property', (done) => {
     let req, req2, resp;
-    req = new rqs.DeleteUserProperty('...not_valid...');
+    req = new rqs.DeleteUserProperty('$$$not_valid$$$');
     env.client.send(req,((err,res) => {
       if(err) {
         chai.equal(err.name, 'ResponseError');

@@ -31,7 +31,7 @@ describe('AddGroup', function(){
   
   it ('fails with invalid entity id', (done) => {
     let req, req2, resp;
-    req = new rqs.AddGroup('...not_valid...');
+    req = new rqs.AddGroup('$$$not_valid$$$');
     env.client.send(req)
     .then((res) => {
       chai.fail();

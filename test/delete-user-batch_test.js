@@ -23,7 +23,7 @@ describe('DeleteUser', function(){
     let requests = [
       new rqs.DeleteUser('entity_id'),
       new rqs.DeleteUser('entity_id'),
-      new rqs.DeleteUser('...not_valid...'),
+      new rqs.DeleteUser('$$$not_valid$$$'),
       new rqs.DeleteUser('valid_id')
     ];
 

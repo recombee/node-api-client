@@ -22,7 +22,7 @@ describe('AddItem', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.AddItem('valid_id'),
-      new rqs.AddItem('...not_valid...'),
+      new rqs.AddItem('$$$not_valid$$$'),
       new rqs.AddItem('valid_id2'),
       new rqs.AddItem('valid_id2')
     ];

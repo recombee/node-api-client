@@ -22,7 +22,7 @@ describe('AddGroup', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.AddGroup('valid_id'),
-      new rqs.AddGroup('...not_valid...'),
+      new rqs.AddGroup('$$$not_valid$$$'),
       new rqs.AddGroup('valid_id2'),
       new rqs.AddGroup('valid_id2')
     ];

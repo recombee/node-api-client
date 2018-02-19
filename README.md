@@ -72,16 +72,15 @@ userIds.forEach((userId) => {
 client.send(new rqs.Batch(purchases))
   .then(() => {
     //Get 5 recommended items for user 'user-25'
-    client.send(new rqs.UserBasedRecommendation('user-25', 5))
+    client.send(new rqs.RecommendItemsToUser('user-25', 5))
       .then((recommended) => {
-        console.log(`Recommended items for user-25: ${recommended}`);
+        console.log("Recommended items for user-25: %j", recommended);
       });
   })
   .catch((error) => {
     console.error(error);
     // Use fallback
   });
-
 ```
 
 ### Using property values
@@ -152,31 +151,26 @@ client.send(new rqs.Batch([new rqs.ResetDatabase(), //TODO
   })
   .then((responses) => {
     // Get 5 recommendations for user-42, who is currently viewing computer-6
-    return client.send(new rqs.ItemBasedRecommendation('computer-6', 5, 
-                                          {'targetUserId': 'user-42'}));
+    return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5));
   })
   .then((recommended) => {
-    console.log(`Recommended items: ${recommended}`);
+    console.log("Recommended items: %j", recommended);
 
-    // Get 5 recommendations for user-42, but recommend only computers that
-    // have at least 3 cores
-    return client.send(new rqs.ItemBasedRecommendation('computer-6', 5, 
-                                                      {'targetUserId': 'user-42',
-                                                       'filter': "'num-cores'>=3"
-                                                      }));
+    // Recommend only computers that have at least 3 cores
+    return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5, 
+                                                      {'filter': "'num-cores'>=3"}
+                                                    ));
   })
   .then((recommended) => {
-    console.log(`Recommended items with at least 3 processor cores: ${recommended}`);
+    console.log("Recommended items with at least 3 processor cores: %j", recommended);
 
-    // Get 5 recommendations for user-42, but recommend only items that
-    // are more expensive then currently viewed item (up-sell)
-    return client.send(new rqs.ItemBasedRecommendation('computer-6', 5, 
-                                                      {'targetUserId': 'user-42',
-                                                      'filter': "'num-cores'>=3"
-                                                      }));
+    // Recommend only items that are more expensive then currently viewed item (up-sell)
+    return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5, 
+                                                      {'filter': "'num-cores'>=3"}
+                                                    ));
   })
   .then((recommended) => {
-    console.log(`Recommended up-sell items: ${recommended}`)
+    console.log("Recommended up-sell items: %j", recommended)
   })
   .catch((error) => {
     console.error(error);

@@ -23,7 +23,7 @@ describe('DeleteItemProperty', function(){
     let requests = [
       new rqs.DeleteItemProperty('int_property'),
       new rqs.DeleteItemProperty('int_property'),
-      new rqs.DeleteItemProperty('...not_valid...'),
+      new rqs.DeleteItemProperty('$$$not_valid$$$'),
       new rqs.DeleteItemProperty('not_existing')
     ];
 

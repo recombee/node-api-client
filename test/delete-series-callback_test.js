@@ -44,7 +44,7 @@ describe('DeleteSeries', function(){
   
   it ('fails with invalid entity id', (done) => {
     let req, req2, resp;
-    req = new rqs.DeleteSeries('...not_valid...');
+    req = new rqs.DeleteSeries('$$$not_valid$$$');
     env.client.send(req,((err,res) => {
       if(err) {
         chai.equal(err.name, 'ResponseError');

@@ -23,7 +23,7 @@ describe('DeleteUserProperty', function(){
     let requests = [
       new rqs.DeleteUserProperty('int_property'),
       new rqs.DeleteUserProperty('int_property'),
-      new rqs.DeleteUserProperty('...not_valid...'),
+      new rqs.DeleteUserProperty('$$$not_valid$$$'),
       new rqs.DeleteUserProperty('not_existing')
     ];
 

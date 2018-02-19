@@ -22,7 +22,7 @@ describe('AddSeries', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.AddSeries('valid_id'),
-      new rqs.AddSeries('...not_valid...'),
+      new rqs.AddSeries('$$$not_valid$$$'),
       new rqs.AddSeries('valid_id2'),
       new rqs.AddSeries('valid_id2')
     ];

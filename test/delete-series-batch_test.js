@@ -23,7 +23,7 @@ describe('DeleteSeries', function(){
     let requests = [
       new rqs.DeleteSeries('entity_id'),
       new rqs.DeleteSeries('entity_id'),
-      new rqs.DeleteSeries('...not_valid...'),
+      new rqs.DeleteSeries('$$$not_valid$$$'),
       new rqs.DeleteSeries('valid_id')
     ];
 
