@@ -93,17 +93,19 @@ var client = new recombee.ApiClient('--my-database-id--', '--my-secret-token--')
 const NUM = 100;
 
 // We will use computers as items in this example
-// Computers have three properties 
+// Computers have four properties 
 //   - price (floating point number)
 //   - number of processor cores (integer number)
 //   - description (string)
+//   - image (url of computer's photo)
 
 // Add properties of items
-client.send(new rqs.Batch([new rqs.ResetDatabase(), //TODO
+client.send(new rqs.Batch([
     new rqs.AddItemProperty('price', 'double'),
     new rqs.AddItemProperty('num-cores', 'int'),
     new rqs.AddItemProperty('description', 'string'),
-    new rqs.AddItemProperty('time', 'timestamp')
+    new rqs.AddItemProperty('time', 'timestamp'),
+    new rqs.AddItemProperty('image', 'image')
   ]))
   .then((responses) => {
     //Prepare requests for setting a catalog of computers
@@ -116,7 +118,8 @@ client.send(new rqs.Batch([new rqs.ResetDatabase(), //TODO
           'price': 600 + 400 * Math.random(),
           'num-cores': Math.floor(Math.random() * 8) + 1,
           'description': 'Great computer',
-          'time': new Date().toISOString()
+          'time': new Date().toISOString(),
+          'image': `http://examplesite.com/products/computer-${i}.jpg`
         },
         //optional parameters:
         {
