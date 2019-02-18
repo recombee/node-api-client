@@ -22,7 +22,7 @@ describe('AddRating', function(){
   
   it ('does not fail with cascadeCreate', (done) => {
     let req, req2, resp;
-    req = new rqs.AddRating('u_id','i_id',1,{'cascadeCreate': true});
+    req = new rqs.AddRating('u_id','i_id',1,{'cascadeCreate': true,'additionalData': {'answer': 42}});
     env.client.send(req)
     .then((res) => {
       done();

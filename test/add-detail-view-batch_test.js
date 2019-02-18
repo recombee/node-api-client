@@ -21,7 +21,7 @@ describe('AddDetailView', function(){
   });
   it ('works in batch', (done) => {
     let requests = [
-      new rqs.AddDetailView('u_id','i_id',{'cascadeCreate': true}),
+      new rqs.AddDetailView('u_id','i_id',{'cascadeCreate': true,'additionalData': {'answer': 42}}),
       new rqs.AddDetailView('entity_id','entity_id'),
       new rqs.AddDetailView('entity_id','entity_id',{'timestamp': '2013-10-29T09:38:41.341Z'}),
       new rqs.AddDetailView('entity_id','nonex_id'),

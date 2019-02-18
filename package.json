@@ -1,6 +1,6 @@
 {
   "name": "recombee-api-client",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Node.js client (SDK) for easy use of the Recombee recommendation API",
   "main": "index.js",
   "scripts": {

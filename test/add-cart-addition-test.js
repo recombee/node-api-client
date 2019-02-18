@@ -22,7 +22,7 @@ describe('AddCartAddition', function(){
   
   it ('does not fail with cascadeCreate', (done) => {
     let req, req2, resp;
-    req = new rqs.AddCartAddition('u_id','i_id',{'cascadeCreate': true});
+    req = new rqs.AddCartAddition('u_id','i_id',{'cascadeCreate': true,'additionalData': {'answer': 42}});
     env.client.send(req)
     .then((res) => {
       done();

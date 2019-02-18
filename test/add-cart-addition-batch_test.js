@@ -21,7 +21,7 @@ describe('AddCartAddition', function(){
   });
   it ('works in batch', (done) => {
     let requests = [
-      new rqs.AddCartAddition('u_id','i_id',{'cascadeCreate': true}),
+      new rqs.AddCartAddition('u_id','i_id',{'cascadeCreate': true,'additionalData': {'answer': 42}}),
       new rqs.AddCartAddition('entity_id','entity_id'),
       new rqs.AddCartAddition('entity_id','entity_id',{'timestamp': '2013-10-29T09:38:41.341Z'}),
       new rqs.AddCartAddition('entity_id','nonex_id'),

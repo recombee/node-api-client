@@ -21,7 +21,7 @@ describe('SetViewPortion', function(){
   });
   it ('works in batch', (done) => {
     let requests = [
-      new rqs.SetViewPortion('u_id','i_id',1,{'cascadeCreate': true}),
+      new rqs.SetViewPortion('u_id','i_id',1,{'cascadeCreate': true,'additionalData': {'answer': 42}}),
       new rqs.SetViewPortion('entity_id','entity_id',0),
       new rqs.SetViewPortion('entity_id','nonex_id',1),
       new rqs.SetViewPortion('nonex_id','entity_id',0.5),

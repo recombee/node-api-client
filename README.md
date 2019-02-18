@@ -1,10 +1,11 @@
 # Recombee API Client
 
 A Node.js client (SDK) for easy use of the [Recombee](https://www.recombee.com/) recommendation API.
-
 If you don't have an account at Recombee yet, you can create a free account [here](https://www.recombee.com/).
 
 Documentation of the API can be found at [docs.recombee.com](https://docs.recombee.com/).
+
+For client side (browser, mobile apps ...) .js library please see [this repository](https://github.com/recombee/js-api-client).
 
 ## Installation
 
@@ -43,7 +44,7 @@ client.send(new AddDetailView,
 var recombee = require('recombee-api-client');
 var rqs = recombee.requests;
 
-var client = new recombee.ApiClient('--my-database-id--', '--my-secret-token--');
+var client = new recombee.ApiClient('--my-database-id--', '--db-private-token--');
 
 // Prepare some userIDs and itemIDs
 const NUM = 100;
@@ -89,7 +90,7 @@ client.send(new rqs.Batch(purchases))
 var recombee = require('recombee-api-client');
 var rqs = recombee.requests;
 
-var client = new recombee.ApiClient('--my-database-id--', '--my-secret-token--');
+var client = new recombee.ApiClient('--my-database-id--', '--db-private-token--');
 const NUM = 100;
 
 // We will use computers as items in this example

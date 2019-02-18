@@ -22,7 +22,7 @@ describe('AddDetailView', function(){
   
   it ('does not fail with cascadeCreate', (done) => {
     let req, req2, resp;
-    req = new rqs.AddDetailView('u_id','i_id',{'cascadeCreate': true});
+    req = new rqs.AddDetailView('u_id','i_id',{'cascadeCreate': true,'additionalData': {'answer': 42}});
     env.client.send(req,((err,res) => {
       if(err) {
         chai.fail();

@@ -21,7 +21,7 @@ describe('AddRating', function(){
   });
   it ('works in batch', (done) => {
     let requests = [
-      new rqs.AddRating('u_id','i_id',1,{'cascadeCreate': true}),
+      new rqs.AddRating('u_id','i_id',1,{'cascadeCreate': true,'additionalData': {'answer': 42}}),
       new rqs.AddRating('entity_id','entity_id',0),
       new rqs.AddRating('entity_id','nonex_id',-1),
       new rqs.AddRating('nonex_id','entity_id',0.5),
