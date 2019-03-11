@@ -1,6 +1,6 @@
 {
   "name": "recombee-api-client",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Node.js client (SDK) for easy use of the Recombee recommendation API",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/Recombee/node-api-client#readme",
   "dependencies": {
-    "request-promise": "^3.0.0",
+    "request-promise": "^4.0.0",
+    "request": "^2.88.0",
     "jssha": "^2.3.0"
   },
   "devDependencies": {
