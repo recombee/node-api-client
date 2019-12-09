@@ -182,6 +182,21 @@ client.send(new rqs.Batch([
   });
 ```
 
+### Constructor options
+
+You can pass a set of options to the default constructor as 
+
+```
+var client = new recombee.ApiClient('--my-database-id--', '--db-private-token--', options);
+```
+
+those options are
+
+| value   | description
+| ------- | -----------
+| proxy   | attach a proxy to the requests as `{ proxy: 'http://user:password@host:port' }`
+| timeout | override the default 1000 ms of each request as  `{ timeout: 3000 }` for 3s request timeout
+
 ## Errors handling
 
 Various errors can occur while processing request, for example because of adding an already existing item or submitting interaction of nonexistent user without *cascadeCreate* set to true. These errors lead to the *ResponseError*, which is thrown or put to callback function by the *send* method of the client (depending on using Promises or callbacks). Another reason for errorneous request is a timeout. *ApiError* is the base class of both *ResponseError* and *TimeoutError*.
