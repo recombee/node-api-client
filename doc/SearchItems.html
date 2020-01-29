@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ListItemBookmarks</title>
+    <title>JSDoc: Class: SearchItems</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ListItemBookmarks</h1>
+    <h1 class="page-title">Class: SearchItems</h1>
 
     
 
@@ -28,9 +28,13 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>ListItemBookmarks<span class="signature">(itemId)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>SearchItems<span class="signature">(userId, searchQuery, count, optional)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">List all the ever-made bookmarks of a given item.</div>
+            <div class="class-description">Full-text personalized search. The results are based on the provided `searchQuery` and also on the user's past interactions (purchases, ratings, etc.) with the items (items more suitable for the user are preferred in the results).
+All the string and set item properties are indexed by the search engine.
+This endpoint should be used in a search box at your website/app. It can be called multiple times as the user is typing the query in order to get the most viable suggestions based on current state of the query, or once after submitting the whole query. 
+It is also possible to use POST HTTP method (for example in case of very long ReQL filter) - query parameters then become body parameters.
+The returned items are sorted by relevancy (first item being the most relevant).</div>
         
     
 </header>
@@ -45,7 +49,7 @@
     
 
     
-    <h4 class="name" id="ListItemBookmarks"><span class="type-signature"></span>new ListItemBookmarks<span class="signature">(itemId)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SearchItems"><span class="type-signature"></span>new SearchItems<span class="signature">(userId, searchQuery, count, optional)</span><span class="type-signature"></span></h4>
     
 
     
@@ -89,7 +93,7 @@
 
         <tr>
             
-                <td class="name"><code>itemId</code></td>
+                <td class="name"><code>userId</code></td>
             
 
             <td class="type">
@@ -105,7 +109,161 @@
 
             
 
-            <td class="description last">ID of the item of which the bookmarks are to be listed.</td>
+            <td class="description last">ID of the user for whom personalized search will be performed.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>searchQuery</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Search query provided by the user. It is used for the full-text search.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>count</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of items to be returned (N for the top-N results).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>optional</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Optional parameters given as an object with structure name of the parameter: value
+- Allowed parameters:
+    - *scenario*
+        - Type: string
+        - Description: Scenario defines a particular search field in your user interface.
+You can set various settings to the [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com). You can also see performance of each scenario in the Admin UI separately, so you can check how well each field performs.
+The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
+    - *cascadeCreate*
+        - Type: boolean
+        - Description: If the user does not exist in the database, returns a list of non-personalized search results and creates the user in the database. This allows for example rotations in the following recommendations for that user, as the user will be already known to the system.
+    - *returnProperties*
+        - Type: boolean
+        - Description: With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying of the recommended items to the user. 
+Example response:
+```
+  {
+    "recommId": "ce52ada4-e4d9-4885-943c-407db2dee837",
+    "recomms": 
+      [
+        {
+          "id": "tv-178",
+          "values": {
+            "description": "4K TV with 3D feature",
+            "categories":   ["Electronics", "Televisions"],
+            "price": 342,
+            "url": "myshop.com/tv-178"
+          }
+        },
+        {
+          "id": "mixer-42",
+          "values": {
+            "description": "Stainless Steel Mixer",
+            "categories":   ["Home & Kitchen"],
+            "price": 39,
+            "url": "myshop.com/mixer-42"
+          }
+        }
+      ]
+  }
+```
+    - *includedProperties*
+        - Type: string[]
+        - Description: Allows to specify, which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. 
+Example response for `includedProperties=description,price`:
+```
+  {
+    "recommId": "a86ee8d5-cd8e-46d1-886c-8b3771d0520b",
+    "recomms":
+      [
+        {
+          "id": "tv-178",
+          "values": {
+            "description": "4K TV with 3D feature",
+            "price": 342
+          }
+        },
+        {
+          "id": "mixer-42",
+          "values": {
+            "description": "Stainless Steel Mixer",
+            "price": 39
+          }
+        }
+      ]
+  }
+```
+    - *filter*
+        - Type: string
+        - Description: Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
+Filters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+    - *booster*
+        - Type: string
+        - Description: Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
+Boosters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+    - *logic*
+        - Type: string|
+        - Description: Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain and use case.
+See [this section](https://docs.recombee.com/recommendation_logics.html) for list of available logics and other details.
+The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
+Logic can be also set to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+    - *expertSettings*
+        - Type: 
+        - Description: Dictionary of custom options.
+    - *returnAbGroup*
+        - Type: boolean
+        - Description: If there is a custom AB-testing running, return name of group to which the request belongs.</td>
         </tr>
 
     
@@ -146,7 +304,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requests_list-item-bookmarks.js.html">requests/list-item-bookmarks.js</a>, <a href="requests_list-item-bookmarks.js.html#line11">line 11</a>
+        <a href="requests_search-items.js.html">requests/search-items.js</a>, <a href="requests_search-items.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -252,7 +410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requests_list-item-bookmarks.js.html">requests/list-item-bookmarks.js</a>, <a href="requests_list-item-bookmarks.js.html#line26">line 26</a>
+        <a href="requests_search-items.js.html">requests/search-items.js</a>, <a href="requests_search-items.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -360,7 +518,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="requests_list-item-bookmarks.js.html">requests/list-item-bookmarks.js</a>, <a href="requests_list-item-bookmarks.js.html#line36">line 36</a>
+        <a href="requests_search-items.js.html">requests/search-items.js</a>, <a href="requests_search-items.js.html#line169">line 169</a>
     </li></ul></dd>
     
 

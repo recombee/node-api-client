@@ -59,23 +59,14 @@ class RecommendItemsToItem extends rqs.Request {
    * @param {number} count - Number of items to be recommended (N for the top-N recommendation).
    * @param {Object} optional - Optional parameters given as an object with structure name of the parameter: value
    * - Allowed parameters:
-   *     - *filter*
+   *     - *scenario*
    *         - Type: string
-   *         - Description: Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
-   *     - *booster*
-   *         - Type: string
-   *         - Description: Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
+   *         - Description: Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing".
+   * You can set various settings to the [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com). You can also see performance of each scenario in the Admin UI separately, so you can check how well each application performs.
+   * The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
    *     - *cascadeCreate*
    *         - Type: boolean
    *         - Description: If item of given *itemId* or user of given *targetUserId* doesn't exist in the database, it creates the missing entity/entities and returns some (non-personalized) recommendations. This allows for example rotations in the following recommendations for the user of given *targetUserId*, as the user will be already known to the system.
-   *     - *scenario*
-   *         - Type: string
-   *         - Description: Scenario defines a particular application of recommendations. It can be for example "homepage", "cart" or "emailing". You can see each scenario in the UI separately, so you can check how well each application performs. The AI which optimizes models in order to get the best results may optimize different scenarios separately, or even use different models in each of the scenarios.
-   *     - *logic*
-   *         - Type: string|
-   *         - Description: Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain (e-commerce, multimedia, fashion ...) and use case.
-   * See [this section](https://docs.recombee.com/recommendation_logic.html) for list of available logics and other details.
-   * The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
    *     - *returnProperties*
    *         - Type: boolean
    *         - Description: With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used for easy displaying of the recommended items to the user. 
@@ -132,6 +123,20 @@ class RecommendItemsToItem extends rqs.Request {
    *       ]
    *   }
    * ```
+   *     - *filter*
+   *         - Type: string
+   *         - Description: Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended items based on the values of their attributes.
+   * Filters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+   *     - *booster*
+   *         - Type: string
+   *         - Description: Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some items based on the values of their attributes.
+   * Boosters can be also assigned to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
+   *     - *logic*
+   *         - Type: string|
+   *         - Description: Logic specifies particular behavior of the recommendation models. You can pick tailored logic for your domain and use case.
+   * See [this section](https://docs.recombee.com/recommendation_logics.html) for list of available logics and other details.
+   * The difference between `logic` and `scenario` is that `logic` specifies mainly behavior, while `scenario` specifies the place where recommendations are shown to the users.
+   * Logic can be also set to a [scenario](https://docs.recombee.com/scenarios.html) in the [Admin UI](https://admin.recombee.com).
    *     - *userImpact*
    *         - Type: number
    *         - Description: **Expert option** If *targetUserId* parameter is present, the recommendations are biased towards the given user. Using *userImpact*, you may control this bias. For an extreme case of `userImpact=0.0`, the interactions made by the user are not taken into account at all (with the exception of history-based blacklisting), for `userImpact=1.0`, you'll get user-based recommendation. The default value is `0`.
@@ -160,13 +165,13 @@ class RecommendItemsToItem extends rqs.Request {
     this.targetUserId = targetUserId;
     this.count = count;
     optional = optional || {};
-    this.filter = optional.filter;
-    this.booster = optional.booster;
-    this.cascadeCreate = optional.cascadeCreate;
     this.scenario = optional.scenario;
-    this.logic = optional.logic;
+    this.cascadeCreate = optional.cascadeCreate;
     this.returnProperties = optional.returnProperties;
     this.includedProperties = optional.includedProperties;
+    this.filter = optional.filter;
+    this.booster = optional.booster;
+    this.logic = optional.logic;
     this.userImpact = optional.userImpact;
     this.diversity = optional.diversity;
     this.minRelevance = optional.minRelevance;
@@ -185,26 +190,26 @@ class RecommendItemsToItem extends rqs.Request {
     params.targetUserId = this.targetUserId;
     params.count = this.count;
 
-    if(this.filter !== undefined)
-      params.filter = this.filter;
-
-    if(this.booster !== undefined)
-      params.booster = this.booster;
-
-    if(this.cascadeCreate !== undefined)
-      params.cascadeCreate = this.cascadeCreate;
-
     if(this.scenario !== undefined)
       params.scenario = this.scenario;
 
-    if(this.logic !== undefined)
-      params.logic = this.logic;
+    if(this.cascadeCreate !== undefined)
+      params.cascadeCreate = this.cascadeCreate;
 
     if(this.returnProperties !== undefined)
       params.returnProperties = this.returnProperties;
 
     if(this.includedProperties !== undefined)
       params.includedProperties = this.includedProperties;
+
+    if(this.filter !== undefined)
+      params.filter = this.filter;
+
+    if(this.booster !== undefined)
+      params.booster = this.booster;
+
+    if(this.logic !== undefined)
+      params.logic = this.logic;
 
     if(this.userImpact !== undefined)
       params.userImpact = this.userImpact;
@@ -251,13 +256,13 @@ exports.RecommendItemsToItem = RecommendItemsToItem
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddBookmark.html">AddBookmark</a></li><li><a href="AddCartAddition.html">AddCartAddition</a></li><li><a href="AddDetailView.html">AddDetailView</a></li><li><a href="AddGroup.html">AddGroup</a></li><li><a href="AddItem.html">AddItem</a></li><li><a href="AddItemProperty.html">AddItemProperty</a></li><li><a href="AddPurchase.html">AddPurchase</a></li><li><a href="AddRating.html">AddRating</a></li><li><a href="AddSeries.html">AddSeries</a></li><li><a href="AddUser.html">AddUser</a></li><li><a href="AddUserProperty.html">AddUserProperty</a></li><li><a href="ApiClient.html">ApiClient</a></li><li><a href="ApiError.html">ApiError</a></li><li><a href="Batch.html">Batch</a></li><li><a href="DeleteBookmark.html">DeleteBookmark</a></li><li><a href="DeleteCartAddition.html">DeleteCartAddition</a></li><li><a href="DeleteDetailView.html">DeleteDetailView</a></li><li><a href="DeleteGroup.html">DeleteGroup</a></li><li><a href="DeleteItem.html">DeleteItem</a></li><li><a href="DeleteItemProperty.html">DeleteItemProperty</a></li><li><a href="DeletePurchase.html">DeletePurchase</a></li><li><a href="DeleteRating.html">DeleteRating</a></li><li><a href="DeleteSeries.html">DeleteSeries</a></li><li><a href="DeleteUser.html">DeleteUser</a></li><li><a href="DeleteUserProperty.html">DeleteUserProperty</a></li><li><a href="DeleteViewPortion.html">DeleteViewPortion</a></li><li><a href="GetItemPropertyInfo.html">GetItemPropertyInfo</a></li><li><a href="GetItemValues.html">GetItemValues</a></li><li><a href="GetUserPropertyInfo.html">GetUserPropertyInfo</a></li><li><a href="GetUserValues.html">GetUserValues</a></li><li><a href="InsertToGroup.html">InsertToGroup</a></li><li><a href="InsertToSeries.html">InsertToSeries</a></li><li><a href="ItemBasedRecommendation.html">ItemBasedRecommendation</a></li><li><a href="ListGroupItems.html">ListGroupItems</a></li><li><a href="ListGroups.html">ListGroups</a></li><li><a href="ListItemBookmarks.html">ListItemBookmarks</a></li><li><a href="ListItemCartAdditions.html">ListItemCartAdditions</a></li><li><a href="ListItemDetailViews.html">ListItemDetailViews</a></li><li><a href="ListItemProperties.html">ListItemProperties</a></li><li><a href="ListItemPurchases.html">ListItemPurchases</a></li><li><a href="ListItemRatings.html">ListItemRatings</a></li><li><a href="ListItems.html">ListItems</a></li><li><a href="ListItemViewPortions.html">ListItemViewPortions</a></li><li><a href="ListSeries.html">ListSeries</a></li><li><a href="ListSeriesItems.html">ListSeriesItems</a></li><li><a href="ListUserBookmarks.html">ListUserBookmarks</a></li><li><a href="ListUserCartAdditions.html">ListUserCartAdditions</a></li><li><a href="ListUserDetailViews.html">ListUserDetailViews</a></li><li><a href="ListUserProperties.html">ListUserProperties</a></li><li><a href="ListUserPurchases.html">ListUserPurchases</a></li><li><a href="ListUserRatings.html">ListUserRatings</a></li><li><a href="ListUsers.html">ListUsers</a></li><li><a href="ListUserViewPortions.html">ListUserViewPortions</a></li><li><a href="MergeUsers.html">MergeUsers</a></li><li><a href="RecommendItemsToItem.html">RecommendItemsToItem</a></li><li><a href="RecommendItemsToUser.html">RecommendItemsToUser</a></li><li><a href="RecommendUsersToItem.html">RecommendUsersToItem</a></li><li><a href="RecommendUsersToUser.html">RecommendUsersToUser</a></li><li><a href="RemoveFromGroup.html">RemoveFromGroup</a></li><li><a href="RemoveFromSeries.html">RemoveFromSeries</a></li><li><a href="Request.html">Request</a></li><li><a href="ResetDatabase.html">ResetDatabase</a></li><li><a href="ResponseError.html">ResponseError</a></li><li><a href="SetItemValues.html">SetItemValues</a></li><li><a href="SetUserValues.html">SetUserValues</a></li><li><a href="SetValues.html">SetValues</a></li><li><a href="SetViewPortion.html">SetViewPortion</a></li><li><a href="TimeoutError.html">TimeoutError</a></li><li><a href="UserBasedRecommendation.html">UserBasedRecommendation</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AddBookmark.html">AddBookmark</a></li><li><a href="AddCartAddition.html">AddCartAddition</a></li><li><a href="AddDetailView.html">AddDetailView</a></li><li><a href="AddGroup.html">AddGroup</a></li><li><a href="AddItem.html">AddItem</a></li><li><a href="AddItemProperty.html">AddItemProperty</a></li><li><a href="AddPurchase.html">AddPurchase</a></li><li><a href="AddRating.html">AddRating</a></li><li><a href="AddSeries.html">AddSeries</a></li><li><a href="AddUser.html">AddUser</a></li><li><a href="AddUserProperty.html">AddUserProperty</a></li><li><a href="ApiClient.html">ApiClient</a></li><li><a href="ApiError.html">ApiError</a></li><li><a href="Batch.html">Batch</a></li><li><a href="DeleteBookmark.html">DeleteBookmark</a></li><li><a href="DeleteCartAddition.html">DeleteCartAddition</a></li><li><a href="DeleteDetailView.html">DeleteDetailView</a></li><li><a href="DeleteGroup.html">DeleteGroup</a></li><li><a href="DeleteItem.html">DeleteItem</a></li><li><a href="DeleteItemProperty.html">DeleteItemProperty</a></li><li><a href="DeletePurchase.html">DeletePurchase</a></li><li><a href="DeleteRating.html">DeleteRating</a></li><li><a href="DeleteSeries.html">DeleteSeries</a></li><li><a href="DeleteUser.html">DeleteUser</a></li><li><a href="DeleteUserProperty.html">DeleteUserProperty</a></li><li><a href="DeleteViewPortion.html">DeleteViewPortion</a></li><li><a href="GetItemPropertyInfo.html">GetItemPropertyInfo</a></li><li><a href="GetItemValues.html">GetItemValues</a></li><li><a href="GetUserPropertyInfo.html">GetUserPropertyInfo</a></li><li><a href="GetUserValues.html">GetUserValues</a></li><li><a href="InsertToGroup.html">InsertToGroup</a></li><li><a href="InsertToSeries.html">InsertToSeries</a></li><li><a href="ItemBasedRecommendation.html">ItemBasedRecommendation</a></li><li><a href="ListGroupItems.html">ListGroupItems</a></li><li><a href="ListGroups.html">ListGroups</a></li><li><a href="ListItemBookmarks.html">ListItemBookmarks</a></li><li><a href="ListItemCartAdditions.html">ListItemCartAdditions</a></li><li><a href="ListItemDetailViews.html">ListItemDetailViews</a></li><li><a href="ListItemProperties.html">ListItemProperties</a></li><li><a href="ListItemPurchases.html">ListItemPurchases</a></li><li><a href="ListItemRatings.html">ListItemRatings</a></li><li><a href="ListItems.html">ListItems</a></li><li><a href="ListItemViewPortions.html">ListItemViewPortions</a></li><li><a href="ListSeries.html">ListSeries</a></li><li><a href="ListSeriesItems.html">ListSeriesItems</a></li><li><a href="ListUserBookmarks.html">ListUserBookmarks</a></li><li><a href="ListUserCartAdditions.html">ListUserCartAdditions</a></li><li><a href="ListUserDetailViews.html">ListUserDetailViews</a></li><li><a href="ListUserProperties.html">ListUserProperties</a></li><li><a href="ListUserPurchases.html">ListUserPurchases</a></li><li><a href="ListUserRatings.html">ListUserRatings</a></li><li><a href="ListUsers.html">ListUsers</a></li><li><a href="ListUserViewPortions.html">ListUserViewPortions</a></li><li><a href="MergeUsers.html">MergeUsers</a></li><li><a href="RecommendItemsToItem.html">RecommendItemsToItem</a></li><li><a href="RecommendItemsToUser.html">RecommendItemsToUser</a></li><li><a href="RecommendUsersToItem.html">RecommendUsersToItem</a></li><li><a href="RecommendUsersToUser.html">RecommendUsersToUser</a></li><li><a href="RemoveFromGroup.html">RemoveFromGroup</a></li><li><a href="RemoveFromSeries.html">RemoveFromSeries</a></li><li><a href="Request.html">Request</a></li><li><a href="ResetDatabase.html">ResetDatabase</a></li><li><a href="ResponseError.html">ResponseError</a></li><li><a href="SearchItems.html">SearchItems</a></li><li><a href="SetItemValues.html">SetItemValues</a></li><li><a href="SetUserValues.html">SetUserValues</a></li><li><a href="SetValues.html">SetValues</a></li><li><a href="SetViewPortion.html">SetViewPortion</a></li><li><a href="TimeoutError.html">TimeoutError</a></li><li><a href="UserBasedRecommendation.html">UserBasedRecommendation</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 11 2019 13:37:20 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Jan 29 2020 13:19:45 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

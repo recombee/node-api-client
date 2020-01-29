@@ -2,13 +2,13 @@
 
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
+var errs = recombee.errors;
 
 var client = new recombee.ApiClient('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L');
 
-var setEnvironment = (() => {
-    
+var _setEnvironmentData = (() => {
   let requests = new rqs.Batch([
-      new rqs.ResetDatabase(),
+
       new rqs.AddItem('entity_id'),
       new rqs.AddUser('entity_id'),
       new rqs.AddSeries('entity_id'),
@@ -24,6 +24,33 @@ var setEnvironment = (() => {
   ]);
 
   return client.send(requests);
+});
+
+var _delay = ((t, v) => {
+   return new Promise(function(resolve) { 
+       setTimeout(resolve.bind(null, v), t)
+   })
+});
+
+var _checkDbErased = (() => {
+  return client.send(new rqs.ListItems())
+  .then((resp) => {
+    return _setEnvironmentData();
+  })
+  .catch(errs.ResponseError,
+    (err) => {
+      // Wait until DB is erased
+      return _delay(2000).then(() => {
+        return _checkDbErased();
+      })
+  })
+});
+
+var setEnvironment = (() => {
+  return client.send(new rqs.ResetDatabase())
+  .then((resp) => {
+    return _checkDbErased();
+  })
 });
 
 var setInteractions = (() => {

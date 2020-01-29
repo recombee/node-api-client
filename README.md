@@ -155,14 +155,9 @@ client.send(new rqs.Batch([
   })
   .then((responses) => {
     // Get 5 recommendations for user-42, who is currently viewing computer-6
-    return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5));
-  })
-  .then((recommended) => {
-    console.log("Recommended items: %j", recommended);
-
     // Recommend only computers that have at least 3 cores
     return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5, 
-                                                      {'filter': "'num-cores'>=3"}
+                                                      {'filter': "'num-cores' >= 3"}
                                                     ));
   })
   .then((recommended) => {
@@ -170,11 +165,25 @@ client.send(new rqs.Batch([
 
     // Recommend only items that are more expensive then currently viewed item (up-sell)
     return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5, 
-                                                      {'filter': "'num-cores'>=3"}
-                                                    ));
+                                          {'filter': " 'price' > context_item[\"price\"] ",
+                                           'returnProperties': true}
+                                          ));
   })
   .then((recommended) => {
     console.log("Recommended up-sell items: %j", recommended)
+
+    // Filters, boosters and other settings can be set also in the Admin UI (admin.recombee.com)
+    // when scenario is specified
+    return client.send(new rqs.RecommendItemsToItem('computer-6', 'user-42', 5, 
+                                                      {'scenario': "product_detail"}
+                                                    ));
+  })
+  .then((recommended) => {
+    // Perform personalized full-text search with a user's search query (e.g. "computers")
+    return client.send(new rqs.SearchItems('user-42', 'computers', 5));
+  })
+  .then((matched) => {
+    console.log("Matched items: %j", matched)
   })
   .catch((error) => {
     console.error(error);
