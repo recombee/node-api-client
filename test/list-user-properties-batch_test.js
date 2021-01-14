@@ -22,12 +22,12 @@ describe('ListUserProperties', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.ListUserProperties()
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[0].json.length, 2);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[0].json.length, 2);
       done();
     });
   });

@@ -29,18 +29,18 @@ describe('AddPurchase', function(){
       new rqs.AddPurchase('entity_id','entity_id',{'timestamp': -15}),
       new rqs.AddPurchase('u_id2','i_id2',{'cascadeCreate': true,'timestamp': 5}),
       new rqs.AddPurchase('u_id2','i_id2',{'cascadeCreate': true,'timestamp': 5})
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[1].code, 200);
-      chai.equal(responses[2].code, 200);
-      chai.equal(responses[3].code, 404);
-      chai.equal(responses[4].code, 404);
-      chai.equal(responses[5].code, 400);
-      chai.equal(responses[6].code, 200);
-      chai.equal(responses[7].code, 409);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[1].code, 200);
+        chai.equal(responses[2].code, 200);
+        chai.equal(responses[3].code, 404);
+        chai.equal(responses[4].code, 404);
+        chai.equal(responses[5].code, 400);
+        chai.equal(responses[6].code, 200);
+        chai.equal(responses[7].code, 409);
       done();
     });
   });

@@ -23,14 +23,14 @@ describe('GetItemPropertyInfo', function(){
     let requests = [
       new rqs.GetItemPropertyInfo('int_property'),
       new rqs.GetItemPropertyInfo('str_property')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.deepEqual('int', responses[0].json['type']);
-      chai.equal(responses[1].code, 200);
-      chai.deepEqual('string', responses[1].json['type']);
+        chai.equal(responses[0].code, 200);
+        chai.deepEqual('int', responses[0].json['type']);
+        chai.equal(responses[1].code, 200);
+        chai.deepEqual('string', responses[1].json['type']);
       done();
     });
   });

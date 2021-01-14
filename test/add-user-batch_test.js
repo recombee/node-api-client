@@ -22,17 +22,17 @@ describe('AddUser', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.AddUser('valid_id'),
-      new rqs.AddUser('$$$not_valid$$$'),
+      new rqs.AddUser('***not_valid$$$'),
       new rqs.AddUser('valid_id2'),
       new rqs.AddUser('valid_id2')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 201);
-      chai.equal(responses[1].code, 400);
-      chai.equal(responses[2].code, 201);
-      chai.equal(responses[3].code, 409);
+        chai.equal(responses[0].code, 201);
+        chai.equal(responses[1].code, 400);
+        chai.equal(responses[2].code, 201);
+        chai.equal(responses[3].code, 409);
       done();
     });
   });

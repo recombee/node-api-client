@@ -24,12 +24,12 @@ describe('DeletePurchase', function(){
     let requests = [
       new rqs.DeletePurchase('user','item',{'timestamp': 0}),
       new rqs.DeletePurchase('user','item')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[1].code, 404);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[1].code, 404);
       done();
     });
   });

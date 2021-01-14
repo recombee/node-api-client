@@ -22,13 +22,13 @@ describe('GetItemValues', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.GetItemValues('entity_id')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.deepEqual(42, responses[0].json['int_property']);
-      chai.deepEqual('hello', responses[0].json['str_property']);
+        chai.equal(responses[0].code, 200);
+        chai.deepEqual(42, responses[0].json['int_property']);
+        chai.deepEqual('hello', responses[0].json['str_property']);
       done();
     });
   });

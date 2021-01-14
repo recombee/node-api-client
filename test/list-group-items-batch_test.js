@@ -22,14 +22,14 @@ describe('ListGroupItems', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.ListGroupItems('entity_id')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[0].json.length, 1);
-      chai.deepEqual('entity_id', responses[0].json[0]['itemId']);
-      chai.deepEqual('item', responses[0].json[0]['itemType']);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[0].json.length, 1);
+        chai.deepEqual('entity_id', responses[0].json[0]['itemId']);
+        chai.deepEqual('item', responses[0].json[0]['itemType']);
       done();
     });
   });

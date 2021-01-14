@@ -22,12 +22,12 @@ describe('ListGroups', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.ListGroups()
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.deepEqual(['entity_id'], responses[0].json);
+        chai.equal(responses[0].code, 200);
+        chai.deepEqual(['entity_id'], responses[0].json);
       done();
     });
   });

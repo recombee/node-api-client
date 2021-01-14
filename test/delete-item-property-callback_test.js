@@ -44,7 +44,7 @@ describe('DeleteItemProperty', function(){
   
   it ('fails with invalid property', (done) => {
     let req, req2, resp;
-    req = new rqs.DeleteItemProperty('$$$not_valid$$$');
+    req = new rqs.DeleteItemProperty('***not_valid$$$');
     env.client.send(req,((err,res) => {
       if(err) {
         chai.equal(err.name, 'ResponseError');

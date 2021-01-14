@@ -25,13 +25,13 @@ describe('RecommendItemsToItem', function(){
       new rqs.RecommendItemsToItem('entity_id','entity_id',9),
       new rqs.RecommendItemsToItem('nonexisting','entity_id',9,{'cascadeCreate': true}),
       new rqs.RecommendItemsToItem('nonexisting2','entity_id',9,{'cascadeCreate': true,'expertSettings': {}})
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[1].code, 200);
-      chai.equal(responses[2].code, 200);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[1].code, 200);
+        chai.equal(responses[2].code, 200);
       done();
     });
   });

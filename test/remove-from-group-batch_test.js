@@ -23,12 +23,12 @@ describe('RemoveFromGroup', function(){
     let requests = [
       new rqs.RemoveFromGroup('entity_id','item','entity_id'),
       new rqs.RemoveFromGroup('entity_id','item','not_contained')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[1].code, 404);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[1].code, 404);
       done();
     });
   });

@@ -23,16 +23,16 @@ describe('DeleteUserProperty', function(){
     let requests = [
       new rqs.DeleteUserProperty('int_property'),
       new rqs.DeleteUserProperty('int_property'),
-      new rqs.DeleteUserProperty('$$$not_valid$$$'),
+      new rqs.DeleteUserProperty('***not_valid$$$'),
       new rqs.DeleteUserProperty('not_existing')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[1].code, 404);
-      chai.equal(responses[2].code, 400);
-      chai.equal(responses[3].code, 404);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[1].code, 404);
+        chai.equal(responses[2].code, 400);
+        chai.equal(responses[3].code, 404);
       done();
     });
   });

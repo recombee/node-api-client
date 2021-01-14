@@ -23,14 +23,14 @@ describe('ListItems', function(){
     let requests = [
       new rqs.ListItems(),
       new rqs.ListItems()
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.deepEqual(['entity_id'], responses[0].json);
-      chai.equal(responses[1].code, 200);
-      chai.equal(responses[1].json.length, 1);
+        chai.equal(responses[0].code, 200);
+        chai.deepEqual(['entity_id'], responses[0].json);
+        chai.equal(responses[1].code, 200);
+        chai.equal(responses[1].json.length, 1);
       done();
     });
   });

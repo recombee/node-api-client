@@ -26,15 +26,15 @@ describe('AddUserProperty', function(){
       new rqs.AddUserProperty('prop','integer'),
       new rqs.AddUserProperty('number2','int'),
       new rqs.AddUserProperty('number2','int')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 201);
-      chai.equal(responses[1].code, 201);
-      chai.equal(responses[2].code, 400);
-      chai.equal(responses[3].code, 201);
-      chai.equal(responses[4].code, 409);
+        chai.equal(responses[0].code, 201);
+        chai.equal(responses[1].code, 201);
+        chai.equal(responses[2].code, 400);
+        chai.equal(responses[3].code, 201);
+        chai.equal(responses[4].code, 409);
       done();
     });
   });

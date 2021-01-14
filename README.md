@@ -71,17 +71,23 @@ userIds.forEach((userId) => {
 
 // Send the data to Recombee, use Batch for faster processing of larger data
 client.send(new rqs.Batch(purchases))
-  .then(() => {
-    //Get 5 recommended items for user 'user-25'
-    client.send(new rqs.RecommendItemsToUser('user-25', 5))
-      .then((recommended) => {
-        console.log("Recommended items for user-25: %j", recommended);
-      });
-  })
-  .catch((error) => {
-    console.error(error);
-    // Use fallback
-  });
+.then(() => {
+  //Get 5 recommended items for user 'user-25'
+  return client.send(new rqs.RecommendItemsToUser('user-25', 5));
+})
+.then((response) => {
+  console.log("Recommended items for user-25: %j", response.recomms);
+
+  // User scrolled down - get next 3 recommended items
+  return client.send(new rqs.RecommendNextItems(response.recommId, 3));
+})
+.then((response) => {
+  console.log("Next recommended items for user-25: %j", response.recomms);
+})
+.catch((error) => {
+  console.error(error);
+  // Use fallback
+});
 ```
 
 ### Using property values
@@ -180,7 +186,7 @@ client.send(new rqs.Batch([
   })
   .then((recommended) => {
     // Perform personalized full-text search with a user's search query (e.g. "computers")
-    return client.send(new rqs.SearchItems('user-42', 'computers', 5));
+    return client.send(new rqs.SearchItems('user-42', 'computers', 5, {'scenario': "search_top"}));
   })
   .then((matched) => {
     console.log("Matched items: %j", matched)

@@ -23,16 +23,16 @@ describe('DeleteItemProperty', function(){
     let requests = [
       new rqs.DeleteItemProperty('int_property'),
       new rqs.DeleteItemProperty('int_property'),
-      new rqs.DeleteItemProperty('$$$not_valid$$$'),
+      new rqs.DeleteItemProperty('***not_valid$$$'),
       new rqs.DeleteItemProperty('not_existing')
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[1].code, 404);
-      chai.equal(responses[2].code, 400);
-      chai.equal(responses[3].code, 404);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[1].code, 404);
+        chai.equal(responses[2].code, 400);
+        chai.equal(responses[3].code, 404);
       done();
     });
   });

@@ -20,18 +20,23 @@ describe('MergeUsers', function(){
      });
   });
   it ('works in batch', (done) => {
-    let requests = [
-      new rqs.AddUser('target'),
-      new rqs.MergeUsers('target','entity_id'),
-      new rqs.MergeUsers('nonex_id','entity_id')
-    ];
-
-    env.client.send(new rqs.Batch(requests))
-    .then((responses) => {
-      chai.equal(responses[0].code, 201);
-      chai.equal(responses[1].code, 200);
-      chai.equal(responses[2].code, 404);
-      done();
-    });
+    env.client.send(new rqs.AddUser('target'),((err,res) => {
+      if(err) {
+        chai.fail();
+      }
+      else {
+        let requests = [
+          new rqs.MergeUsers('target','entity_id'),
+          new rqs.MergeUsers('nonex_id','entity_id')
+          ];
+        
+        env.client.send(new rqs.Batch(requests))
+        .then((responses) => {
+            chai.equal(responses[0].code, 200);
+            chai.equal(responses[1].code, 404);
+          done();
+        });
+      }
+    }));
   });
 });

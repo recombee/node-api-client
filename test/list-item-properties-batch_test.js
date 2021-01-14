@@ -22,12 +22,12 @@ describe('ListItemProperties', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.ListItemProperties()
-    ];
-
+      ];
+    
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-      chai.equal(responses[0].code, 200);
-      chai.equal(responses[0].json.length, 2);
+        chai.equal(responses[0].code, 200);
+        chai.equal(responses[0].json.length, 2);
       done();
     });
   });

@@ -31,7 +31,7 @@ describe('AddSeries', function(){
   
   it ('fails with invalid entity id', (done) => {
     let req, req2, resp;
-    req = new rqs.AddSeries('$$$not_valid$$$');
+    req = new rqs.AddSeries('***not_valid$$$');
     env.client.send(req)
     .then((res) => {
       chai.fail();
