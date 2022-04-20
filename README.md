@@ -44,7 +44,7 @@ client.send(new AddDetailView,
 var recombee = require('recombee-api-client');
 var rqs = recombee.requests;
 
-var client = new recombee.ApiClient('--my-database-id--', '--db-private-token--');
+var client = new recombee.ApiClient('--my-database-id--', '--db-private-token--', {region: 'us-west'});
 
 // Prepare some userIDs and itemIDs
 const NUM = 100;
@@ -96,7 +96,7 @@ client.send(new rqs.Batch(purchases))
 var recombee = require('recombee-api-client');
 var rqs = recombee.requests;
 
-var client = new recombee.ApiClient('--my-database-id--', '--db-private-token--');
+var client = new recombee.ApiClient('--my-database-id--', '--db-private-token--', {region: 'ap-se'});
 const NUM = 100;
 
 // We will use computers as items in this example

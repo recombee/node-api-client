@@ -73,9 +73,12 @@ describe('SetItemValues', function(){
       chai.fail();
       done();
     })
-    .catch(recombee.errors.ResponseError,(err) => {
-      chai.equal(err.statusCode, 404);
-      done();
+    .catch((err) => {
+      if (err instanceof recombee.errors.ResponseError) {
+        chai.equal(err.statusCode, 404);
+        done();
+      }
+      throw err;
     });
   });
 });

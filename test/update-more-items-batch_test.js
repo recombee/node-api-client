@@ -9,32 +9,26 @@ var rqs = recombee.requests;
 
 var env = require('./set-environment.js');
 
-describe('ItemBasedRecommendation', function(){
+describe('UpdateMoreItems', function(){
   this.timeout(150000);
 
   before(function(done){
 
     env.setEnvironment()
-    .then(env.setRecommEntities)
     .then(()=> {
       done();
      });
   });
   it ('works in batch', (done) => {
     let requests = [
-      new rqs.ItemBasedRecommendation('entity_id',9),
-      new rqs.ItemBasedRecommendation('nonexisting',9,{'cascadeCreate': true}),
-      new rqs.ItemBasedRecommendation('nonexisting2',9,{'cascadeCreate': true,'expertSettings': {}})
+      new rqs.UpdateMoreItems('\'int_property\' == 42',{'int_property': 77})
       ];
     
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
         chai.equal(responses[0].code, 200);
-        chai.equal(responses[0].json.length, 9);
-        chai.equal(responses[1].code, 200);
-        chai.equal(responses[1].json.length, 9);
-        chai.equal(responses[2].code, 200);
-        chai.equal(responses[2].json.length, 9);
+        chai.equal(responses[0].json['itemIds'].length, 1);
+        chai.deepEqual(1, responses[0].json['count']);
       done();
     });
   });

@@ -55,9 +55,12 @@ describe('InsertToGroup', function(){
           chai.fail();
           done();
         })
-        .catch(recombee.errors.ResponseError,(err) => {
-          chai.equal(err.statusCode, 409);
-          done();
+        .catch((err) => {
+          if (err instanceof recombee.errors.ResponseError) {
+            chai.equal(err.statusCode, 409);
+            done();
+          }
+          throw err;
         });
       });
     });

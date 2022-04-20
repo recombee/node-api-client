@@ -4,7 +4,7 @@ var recombee = require('./../index.js');
 var rqs = recombee.requests;
 var errs = recombee.errors;
 
-var client = new recombee.ApiClient('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L');
+var client = new recombee.ApiClient('client-test', 'jGGQ6ZKa8rQ1zTAyxTc0EMn55YPF7FJLUtaMLhbsGxmvwxgTwXYqmUk5xVZFw98L', {'region': 'eu-west'});
 
 var _setEnvironmentData = (() => {
   let requests = new rqs.Batch([
@@ -37,12 +37,14 @@ var _checkDbErased = (() => {
   .then((resp) => {
     return _setEnvironmentData();
   })
-  .catch(errs.ResponseError,
-    (err) => {
+  .catch((err) => {
+    if (err instanceof errs.ResponseError && err.statusCode === 422) {
       // Wait until DB is erased
       return _delay(2000).then(() => {
         return _checkDbErased();
-      })
+      });
+    }
+    throw err;
   })
 });
 
