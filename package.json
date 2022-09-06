@@ -1,5 +1,5 @@
 {
-  "name": "@mediavine/recombee-api-client",
+  "name": "recombee-api-client",
   "version": "4.0.0",
   "description": "Node.js client (SDK) for easy use of the Recombee recommendation API",
   "main": "index.js",
