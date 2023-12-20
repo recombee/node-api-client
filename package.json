@@ -31,6 +31,8 @@
     "jssha": "^2.3.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^3.5.0",
+		"mocha": "~10.2.0",
+		"typescript": "~5.3.3"
   }
 }

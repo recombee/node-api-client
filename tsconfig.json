@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"module": "NodeNext",
+		"noEmit": true,
+		"strict": true,
+		"noUncheckedIndexedAccess": true
+	},
+	"include": ["lib/index.d.ts"]
+}

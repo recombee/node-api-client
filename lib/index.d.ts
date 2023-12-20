@@ -17,6 +17,11 @@ export module "recombee-api-client" {
         ensureHttps: boolean
       );
 
+      method: "GET" | "PUT" | "POST" | "DELETE";
+      path: string;
+      timeout: number;
+      ensureHttps: boolean;
+
       protected __response_type: any;
     }
 
@@ -194,9 +199,9 @@ export module "recombee-api-client" {
   }
 
   export type BatchResponse = {
-    statusCode: number;
-    response: Response[];
-  }
+    code: number;
+    json: any;
+  }[]
 
   /**
     * Client for sending requests to Recombee and getting replies
