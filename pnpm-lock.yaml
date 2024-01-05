@@ -7,7 +7,7 @@ settings:
 dependencies:
   got:
     specifier: ^11.8.2
-    version: 11.8.2
+    version: 11.8.5
   jssha:
     specifier: ^2.3.0
     version: 2.3.0
@@ -341,8 +341,8 @@ packages:
       path-is-absolute: 1.0.1
     dev: true
 
-  /got@11.8.2:
-    resolution: {integrity: sha512-D0QywKgIe30ODs+fm8wMZiAcZjypcCodPNuMz5H9Mny7RJ+IjJ10BdmGW7OM7fHXP+O7r6ZwapQ/YQmMSvB0UQ==}
+  /got@11.8.5:
+    resolution: {integrity: sha512-o0Je4NvQObAuZPHLFoRSkdG2lTgtcynqymzg2Vupdx6PorhaT5MCbIyXG6d4D94kk8ZG57QeosgdiqfJWhEhlQ==}
     engines: {node: '>=10.19.0'}
     dependencies:
       '@sindresorhus/is': 4.6.0
