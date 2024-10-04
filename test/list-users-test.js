@@ -32,7 +32,7 @@ describe('ListUsers', function(){
   
   it ('return properties', (done) => {
     let req, req2, resp;
-    req = new rqs.ListUsers();
+    req = new rqs.ListUsers({'returnProperties': true});
     env.client.send(req)
     .then((res) => {
       chai.equal(res.length, 1);

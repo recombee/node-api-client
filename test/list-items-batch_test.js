@@ -22,7 +22,7 @@ describe('ListItems', function(){
   it ('works in batch', (done) => {
     let requests = [
       new rqs.ListItems(),
-      new rqs.ListItems()
+      new rqs.ListItems({'returnProperties': true})
       ];
     
     env.client.send(new rqs.Batch(requests))

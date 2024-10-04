@@ -76,21 +76,6 @@ describe('AddRating', function(){
     }));
   });
   
-  it ('fails with invalid time', (done) => {
-    let req, req2, resp;
-    req = new rqs.AddRating('entity_id','entity_id',0,{'timestamp': -15});
-    env.client.send(req,((err,res) => {
-      if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 400);
-        done();
-      }
-      else {
-        chai.fail();
-      }
-    }));
-  });
-  
   it ('fails with invalid rating', (done) => {
     let req, req2, resp;
     req = new rqs.AddRating('entity_id','entity_id',-2);

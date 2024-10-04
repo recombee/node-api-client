@@ -36,7 +36,7 @@ describe('ListUsers', function(){
   
   it ('return properties', (done) => {
     let req, req2, resp;
-    req = new rqs.ListUsers();
+    req = new rqs.ListUsers({'returnProperties': true});
     env.client.send(req,((err,res) => {
       if(err) {
         chai.fail();

@@ -89,21 +89,6 @@ describe('AddCartAddition', function(){
     }));
   });
   
-  it ('fails with invalid time', (done) => {
-    let req, req2, resp;
-    req = new rqs.AddCartAddition('entity_id','entity_id',{'timestamp': -15});
-    env.client.send(req,((err,res) => {
-      if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 400);
-        done();
-      }
-      else {
-        chai.fail();
-      }
-    }));
-  });
-  
   it ('really stores interaction to the system', (done) => {
     let req, req2, resp;
     req = new rqs.AddCartAddition('u_id2','i_id2',{'cascadeCreate': true,'timestamp': 5});

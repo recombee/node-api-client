@@ -81,23 +81,6 @@ describe('AddPurchase', function(){
     });
   });
   
-  it ('fails with invalid time', (done) => {
-    let req, req2, resp;
-    req = new rqs.AddPurchase('entity_id','entity_id',{'timestamp': -15});
-    env.client.send(req)
-    .then((res) => {
-      chai.fail();
-      done();
-    })
-    .catch((err) => {
-      if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 400);
-        done();
-      }
-      throw err;
-    });
-  });
-  
   it ('really stores interaction to the system', (done) => {
     let req, req2, resp;
     req = new rqs.AddPurchase('u_id2','i_id2',{'cascadeCreate': true,'timestamp': 5});

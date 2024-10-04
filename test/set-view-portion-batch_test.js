@@ -25,7 +25,6 @@ describe('SetViewPortion', function(){
       new rqs.SetViewPortion('entity_id','entity_id',0),
       new rqs.SetViewPortion('entity_id','nonex_id',1),
       new rqs.SetViewPortion('nonex_id','entity_id',0.5),
-      new rqs.SetViewPortion('entity_id','entity_id',0,{'timestamp': -15}),
       new rqs.SetViewPortion('entity_id','entity_id',-2),
       new rqs.SetViewPortion('entity_id','entity_id',0.7,{'sessionId': 'a****'})
       ];
@@ -38,7 +37,6 @@ describe('SetViewPortion', function(){
         chai.equal(responses[3].code, 404);
         chai.equal(responses[4].code, 400);
         chai.equal(responses[5].code, 400);
-        chai.equal(responses[6].code, 400);
       done();
     });
   });

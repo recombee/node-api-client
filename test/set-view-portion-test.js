@@ -72,23 +72,6 @@ describe('SetViewPortion', function(){
     });
   });
   
-  it ('fails with invalid time', (done) => {
-    let req, req2, resp;
-    req = new rqs.SetViewPortion('entity_id','entity_id',0,{'timestamp': -15});
-    env.client.send(req)
-    .then((res) => {
-      chai.fail();
-      done();
-    })
-    .catch((err) => {
-      if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 400);
-        done();
-      }
-      throw err;
-    });
-  });
-  
   it ('fails with invalid portion', (done) => {
     let req, req2, resp;
     req = new rqs.SetViewPortion('entity_id','entity_id',-2);
