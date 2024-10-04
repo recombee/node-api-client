@@ -257,7 +257,7 @@ export module "recombee-api-client" {
     ): string
   }
 
-  type Response = Item | PropertyInfo | UpdateMoreItemsResponse | DeleteMoreItemsResponse | Series | SeriesItem | Group | GroupItem | User | DetailView | Purchase | Rating | CartAddition | Bookmark | ViewPortion | RecommendationResponse | SearchResponse | SearchSynonym | ListSearchSynonymsResponse | ListSegmentationsResponse | Segmentation;
+  type Response = Item | PropertyInfo | UpdateMoreItemsResponse | DeleteMoreItemsResponse | Series | SeriesItem | User | DetailView | Purchase | Rating | CartAddition | Bookmark | ViewPortion | RecommendationResponse | SearchResponse | SearchSynonym | ListSearchSynonymsResponse | ListSegmentationsResponse | Segmentation;
 
   export type Item = {
     itemId: string;
@@ -265,8 +265,8 @@ export module "recombee-api-client" {
   }
 
   export type PropertyInfo = {
-    name?: string;
-    type?: string;
+    name: string;
+    type: string;
   }
 
   export type UpdateMoreItemsResponse = {
@@ -287,16 +287,6 @@ export module "recombee-api-client" {
     itemType: string;
     itemId: string;
     time: number;
-    cascadeCreate?: boolean;
-  }
-
-  export type Group = {
-    groupId: string;
-  }
-
-  export type GroupItem = {
-    itemType: string;
-    itemId: string;
     cascadeCreate?: boolean;
   }
 
@@ -519,7 +509,7 @@ export module "recombee-api-client" {
     }
 
     /**
-     * Adding an item property is somehow equivalent to adding a column to the table of items. The items may be characterized by various properties of different types.
+     * Adding an item property is somewhat equivalent to adding a column to the table of items. The items may be characterized by various properties of different types.
      */
     export class AddItemProperty extends requests.Request {
       /**
@@ -825,154 +815,6 @@ export module "recombee-api-client" {
     }
 
     /**
-     * Creates a new group in the database.
-     */
-    export class AddGroup extends requests.Request {
-      /**
-       * @param groupId - ID of the group to be created.
-       */
-      constructor(
-        groupId: string,
-      );
-
-      groupId: string;
-      protected __response_type: string;
-
-      bodyParameters(): {
-      };
-
-      queryParameters(): {
-      };
-    }
-
-    /**
-     * Deletes the group of the given `groupId` from the database.
-     * Deleting a group will only delete the assignment of items to it, not the items themselves!
-     */
-    export class DeleteGroup extends requests.Request {
-      /**
-       * @param groupId - ID of the group to be deleted.
-       */
-      constructor(
-        groupId: string,
-      );
-
-      groupId: string;
-      protected __response_type: string;
-
-      bodyParameters(): {
-      };
-
-      queryParameters(): {
-      };
-    }
-
-    /**
-     * Gets the list of all the groups currently present in the database.
-     */
-    export class ListGroups extends requests.Request {
-      /**
-
-       */
-      constructor(
-      );
-
-      protected __response_type: Group[];
-
-      bodyParameters(): {
-      };
-
-      queryParameters(): {
-      };
-    }
-
-    /**
-     * List all the items present in the given group.
-     */
-    export class ListGroupItems extends requests.Request {
-      /**
-       * @param groupId - ID of the group whose items are to be listed.
-       */
-      constructor(
-        groupId: string,
-      );
-
-      groupId: string;
-      protected __response_type: GroupItem[];
-
-      bodyParameters(): {
-      };
-
-      queryParameters(): {
-      };
-    }
-
-    /**
-     * Inserts an existing item/group into a group of the given `groupId`.
-     */
-    export class InsertToGroup extends requests.Request {
-      /**
-       * @param groupId - ID of the group to be inserted into.
-       * @param itemType - `item` iff the regular item from the catalog is to be inserted, `group` iff group is inserted as the item.
-       * @param itemId - ID of the item iff `itemType` is `item`. ID of the group iff `itemType` is `group`.
-       * @param optional - Optional parameters given as an object.
-       */
-      constructor(
-        groupId: string,
-        itemType: string,
-        itemId: string,
-        optional?: {
-          /** Indicates that any non-existing entity specified within the request should be created (as if corresponding PUT requests were invoked). This concerns both the `groupId` and the `groupId`. If `cascadeCreate` is set to true, the behavior also depends on the `itemType`. Either items or group may be created if not present in the database. */
-          cascadeCreate?: boolean;
-        }
-      );
-
-      groupId: string;
-      itemType: string;
-      itemId: string;
-      cascadeCreate?: boolean;
-      protected __response_type: string;
-
-      bodyParameters(): {
-        itemType: string;
-        itemId: string;
-        cascadeCreate?: boolean;
-      };
-
-      queryParameters(): {
-      };
-    }
-
-    /**
-     * Removes an existing group item from the group.
-     */
-    export class RemoveFromGroup extends requests.Request {
-      /**
-       * @param groupId - ID of the group from which a group item is to be removed.
-       * @param itemType - Type of the item to be removed.
-       * @param itemId - ID of the item iff `itemType` is `item`. ID of the group iff `itemType` is `group`.
-       */
-      constructor(
-        groupId: string,
-        itemType: string,
-        itemId: string,
-      );
-
-      groupId: string;
-      itemType: string;
-      itemId: string;
-      protected __response_type: string;
-
-      bodyParameters(): {
-      };
-
-      queryParameters(): {
-        itemType: string;
-        itemId: string;
-      };
-    }
-
-    /**
      * Adds a new user to the database.
      */
     export class AddUser extends requests.Request {
@@ -1110,7 +952,7 @@ export module "recombee-api-client" {
     }
 
     /**
-     * Adding a user property is somehow equivalent to adding a column to the table of users. The users may be characterized by various properties of different types.
+     * Adding a user property is somewhat equivalent to adding a column to the table of users. The users may be characterized by various properties of different types.
      */
     export class AddUserProperty extends requests.Request {
       /**

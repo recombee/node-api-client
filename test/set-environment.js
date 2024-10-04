@@ -12,8 +12,6 @@ var _setEnvironmentData = (() => {
       new rqs.AddItem('entity_id'),
       new rqs.AddUser('entity_id'),
       new rqs.AddSeries('entity_id'),
-      new rqs.AddGroup('entity_id'),
-      new rqs.InsertToGroup('entity_id', 'item', 'entity_id'),
       new rqs.InsertToSeries('entity_id', 'item', 'entity_id', 1),
       new rqs.AddItemProperty('int_property', 'int'),
       new rqs.AddItemProperty('str_property', 'string'),
