@@ -20,6 +20,9 @@
     "API",
     "SDK"
   ],
+  "engines": {
+    "node": ">=13.2.0"
+  },
   "author": "Ondrej Fiedler <ondrej.fiedler@recombee.com> (https://www.recombee.com/)",
   "license": "MIT",
   "bugs": {
@@ -27,12 +30,12 @@
   },
   "homepage": "https://github.com/Recombee/node-api-client#readme",
   "dependencies": {
-    "got": "^11.8.2",
-    "jssha": "^2.3.0"
+    "jssha": "^2.3.0",
+    "ky": "^1.7.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-		"mocha": "~10.2.0",
-		"typescript": "~5.3.3"
+    "mocha": "~10.2.0",
+    "typescript": "~5.3.3"
   }
 }
