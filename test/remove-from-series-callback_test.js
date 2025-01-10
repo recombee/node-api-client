@@ -20,24 +20,9 @@ describe('RemoveFromSeries', function(){
      });
   });
   
-  it ('fails when removing item which have different time', (done) => {
-    let req, req2, resp;
-    req = new rqs.RemoveFromSeries('entity_id','item','entity_id',0);
-    env.client.send(req,((err,res) => {
-      if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 404);
-        done();
-      }
-      else {
-        chai.fail();
-      }
-    }));
-  });
-  
   it ('does not fail when removing item that is contained in the set', (done) => {
     let req, req2, resp;
-    req = new rqs.RemoveFromSeries('entity_id','item','entity_id',1);
+    req = new rqs.RemoveFromSeries('entity_id','item','entity_id');
     env.client.send(req,((err,res) => {
       if(err) {
         chai.fail();
@@ -50,7 +35,7 @@ describe('RemoveFromSeries', function(){
   
   it ('fails when removing item that is not contained in the set', (done) => {
     let req, req2, resp;
-    req = new rqs.RemoveFromSeries('entity_id','item','not_contained',1);
+    req = new rqs.RemoveFromSeries('entity_id','item','not_contained');
     env.client.send(req,((err,res) => {
       if(err) {
         chai.equal(err.name, 'ResponseError');

@@ -9,29 +9,20 @@ var rqs = recombee.requests;
 
 var env = require('./set-environment.js');
 
-describe('RemoveFromSeries', function(){
+describe('RecommendItemsToItemSegment', function(){
   this.timeout(150000);
 
   before(function(done){
 
     env.setEnvironment()
     .then(()=> {
-      setTimeout(done, 20000);
+      done();
      });
   });
   
-  it ('does not fail when removing item that is contained in the set', (done) => {
+  it ('rejects request to scenario which is not set up', (done) => {
     let req, req2, resp;
-    req = new rqs.RemoveFromSeries('entity_id','item','entity_id');
-    env.client.send(req)
-    .then((res) => {
-      done();
-    });
-  });
-  
-  it ('fails when removing item that is not contained in the set', (done) => {
-    let req, req2, resp;
-    req = new rqs.RemoveFromSeries('entity_id','item','not_contained');
+    req = new rqs.RecommendItemsToItemSegment('segment_id','entity_id',5,{'scenario': 'scenario1','cascadeCreate': true});
     env.client.send(req)
     .then((res) => {
       chai.fail();
@@ -39,7 +30,7 @@ describe('RemoveFromSeries', function(){
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 404);
+        chai.equal(err.statusCode, 400);
         done();
       }
       throw err;
