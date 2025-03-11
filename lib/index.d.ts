@@ -1,4 +1,4 @@
-export module "recombee-api-client" {
+declare module "recombee-api-client" {
   namespace requests {
     /**
      * Base class for all the requests
