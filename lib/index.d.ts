@@ -1,4 +1,4 @@
-export module "recombee-api-client" {
+declare module "recombee-api-client" {
   namespace requests {
     /**
      * Base class for all the requests
@@ -256,8 +256,6 @@ export module "recombee-api-client" {
       req_part: string
     ): string
   }
-
-  type Response = Item | PropertyInfo | UpdateMoreItemsResponse | DeleteMoreItemsResponse | Series | SeriesItem | User | DetailView | Purchase | Rating | CartAddition | Bookmark | ViewPortion | RecommendationResponse | SearchResponse | SearchSynonym | ListSearchSynonymsResponse | ListSegmentationsResponse | Segmentation;
 
   export type Item = {
     itemId: string;
