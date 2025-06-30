@@ -21,7 +21,7 @@
     "SDK"
   ],
   "engines": {
-    "node": ">=13.2.0"
+    "node": ">=18"
   },
   "author": "Ondrej Fiedler <ondrej.fiedler@recombee.com> (https://www.recombee.com/)",
   "license": "MIT",
