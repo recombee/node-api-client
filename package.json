@@ -31,7 +31,7 @@
   "homepage": "https://github.com/Recombee/node-api-client#readme",
   "dependencies": {
     "jssha": "^2.3.0",
-    "ky": "^1.7.2"
+    "ky": "^1.8.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
