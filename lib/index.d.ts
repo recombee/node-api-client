@@ -192,16 +192,48 @@ declare module "recombee-api-client" {
   }
 
   export type ApiClientOptions = {
-    baseUri?: string;
-    region?: string;
     protocol?: string;
     agent?: object;
-  }
+  } & (
+    | {
+        baseUri?: string;
+      }
+    | {
+        region?: string;
+      }
+  )
 
   export type BatchResponse = {
     code: number;
     json: any;
   }[]
+
+  /**
+   * Mapping of Item/User property types to their corresponding TypeScript types.
+   */
+  export type EntityProperty =
+    | StringProperty
+    | IntProperty
+    | DoubleProperty
+    | BooleanProperty
+    | TimestampProperty
+    | SetProperty
+    | ImageProperty
+    | ImageListProperty
+    | null;
+    
+  type StringProperty = string;
+  type IntProperty = number;
+  type DoubleProperty = number;
+  type BooleanProperty = boolean;
+  /** Unix timestamp in seconds */
+  type TimestampProperty = number;
+  /** Unordered set of strings */
+  type SetProperty = string[];
+  /** URL of the image */
+  type ImageProperty = string;
+  /** Array of image URLs */
+  type ImageListProperty = string[];
 
   /**
     * Client for sending requests to Recombee and getting replies
@@ -259,7 +291,7 @@ declare module "recombee-api-client" {
 
   export type Item = {
     itemId: string;
-    values?: { [key: string]: unknown };
+    values?: Record<string, EntityProperty>;
   }
 
   export type PropertyInfo = {
@@ -290,7 +322,7 @@ declare module "recombee-api-client" {
 
   export type User = {
     userId: string;
-    values?: { [key: string]: unknown };
+    values?: Record<string, EntityProperty>;
   }
 
   export type DetailView = {
@@ -300,7 +332,7 @@ declare module "recombee-api-client" {
     duration?: number;
     cascadeCreate?: boolean;
     recommId?: string;
-    additionalData?: { [key: string]: unknown };
+    additionalData?: Record<string, unknown>;
   }
 
   export type Purchase = {
@@ -312,7 +344,7 @@ declare module "recombee-api-client" {
     price?: number;
     profit?: number;
     recommId?: string;
-    additionalData?: { [key: string]: unknown };
+    additionalData?: Record<string, unknown>;
   }
 
   export type Rating = {
@@ -322,7 +354,7 @@ declare module "recombee-api-client" {
     rating: number;
     cascadeCreate?: boolean;
     recommId?: string;
-    additionalData?: { [key: string]: unknown };
+    additionalData?: Record<string, unknown>;
   }
 
   export type CartAddition = {
@@ -333,7 +365,7 @@ declare module "recombee-api-client" {
     amount?: number;
     price?: number;
     recommId?: string;
-    additionalData?: { [key: string]: unknown };
+    additionalData?: Record<string, unknown>;
   }
 
   export type Bookmark = {
@@ -342,7 +374,7 @@ declare module "recombee-api-client" {
     timestamp?: string | number;
     cascadeCreate?: boolean;
     recommId?: string;
-    additionalData?: { [key: string]: unknown };
+    additionalData?: Record<string, unknown>;
   }
 
   export type ViewPortion = {
@@ -353,12 +385,12 @@ declare module "recombee-api-client" {
     timestamp?: string | number;
     cascadeCreate?: boolean;
     recommId?: string;
-    additionalData?: { [key: string]: unknown };
+    additionalData?: Record<string, unknown>;
   }
 
   export type Recommendation = {
     id: string;
-    values?: { [key: string]: unknown };
+    values?: Record<string, EntityProperty>;
   }
 
   export type RecommendationResponse = {
@@ -398,6 +430,11 @@ declare module "recombee-api-client" {
     description?: string;
   }
 
+  export type Scenario = {
+    id: string;
+    endpoint: string;
+  }
+
   namespace requests {
     /**
      * Adds new item of the given `itemId` to the items catalog.
@@ -424,7 +461,7 @@ declare module "recombee-api-client" {
     /**
      * Deletes an item of the given `itemId` from the catalog.
      * If there are any *purchases*, *ratings*, *bookmarks*, *cart additions*, or *detail views* of the item present in the database, they will be deleted in cascade as well. Also, if the item is present in some *series*, it will be removed from all the *series* where present.
-     * If an item becomes obsolete/no longer available, it is meaningful to keep it in the catalog (along with all the interaction data, which are very useful), and **only exclude the item from recommendations**. In such a case, use [ReQL filter](https://docs.recombee.com/reql.html) instead of deleting the item completely.
+     * If an item becomes obsolete/no longer available, it is meaningful to keep it in the catalog (along with all the interaction data, which are very useful), and **only exclude the item from recommendations**. In such a case, use [ReQL filter](https://docs.recombee.com/reql) instead of deleting the item completely.
      */
     export class DeleteItem extends requests.Request {
       /**
@@ -456,7 +493,7 @@ declare module "recombee-api-client" {
       );
 
       itemId: string;
-      protected __response_type: string[];
+      protected __response_type: Record<string, EntityProperty>;
 
       bodyParameters(): {
       };
@@ -474,7 +511,7 @@ declare module "recombee-api-client" {
        */
       constructor(
         optional?: {
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter items to be listed. Only the items for which the expression is *true* will be returned. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter items to be listed. Only the items for which the expression is *true* will be returned. */
           filter?: string;
           /** The number of items to be listed. */
           count?: number;
@@ -612,7 +649,7 @@ declare module "recombee-api-client" {
      */
     export class UpdateMoreItems extends requests.Request {
       /**
-       * @param filter - A [ReQL](https://docs.recombee.com/reql.html) expression, which returns `true` for the items that shall be updated.
+       * @param filter - A [ReQL](https://docs.recombee.com/reql) expression, which returns `true` for the items that shall be updated.
        * @param changes - A dictionary where the keys are properties that shall be updated.
        */
       constructor(
@@ -635,11 +672,11 @@ declare module "recombee-api-client" {
 
     /**
      * Deletes all the items that pass the filter.
-     * If an item becomes obsolete/no longer available, it is meaningful to **keep it in the catalog** (along with all the interaction data, which are very useful) and **only exclude the item from recommendations**. In such a case, use [ReQL filter](https://docs.recombee.com/reql.html) instead of deleting the item completely.
+     * If an item becomes obsolete/no longer available, it is meaningful to **keep it in the catalog** (along with all the interaction data, which are very useful) and **only exclude the item from recommendations**. In such a case, use [ReQL filter](https://docs.recombee.com/reql) instead of deleting the item completely.
      */
     export class DeleteMoreItems extends requests.Request {
       /**
-       * @param filter - A [ReQL](https://docs.recombee.com/reql.html) expression, which returns `true` for the items that shall be updated.
+       * @param filter - A [ReQL](https://docs.recombee.com/reql) expression, which returns `true` for the items that shall be updated.
        */
       constructor(
         filter: string,
@@ -877,7 +914,7 @@ declare module "recombee-api-client" {
       );
 
       userId: string;
-      protected __response_type: string[];
+      protected __response_type: Record<string, EntityProperty>;
 
       bodyParameters(): {
       };
@@ -889,6 +926,8 @@ declare module "recombee-api-client" {
     /**
      * Merges interactions (purchases, ratings, bookmarks, detail views ...) of two different users under a single user ID. This is especially useful for online e-commerce applications working with anonymous users identified by unique tokens such as the session ID. In such applications, it may often happen that a user owns a persistent account, yet accesses the system anonymously while, e.g., putting items into a shopping cart. At some point in time, such as when the user wishes to confirm the purchase, (s)he logs into the system using his/her username and password. The interactions made under anonymous session ID then become connected with the persistent account, and merging these two becomes desirable.
      * Merging happens between two users referred to as the *target* and the *source*. After the merge, all the interactions of the source user are attributed to the target user, and the source user is **deleted**.
+     * By default, the *Merge Users* request is only available from server-side integrations for security reasons, to prevent potential abuse.
+     * If you need to call this request from a client-side environment (such as a web or mobile app), please contact our support and request access to enable this feature for your database.
      */
     export class MergeUsers extends requests.Request {
       /**
@@ -927,7 +966,7 @@ declare module "recombee-api-client" {
        */
       constructor(
         optional?: {
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter users to be listed. Only the users for which the expression is *true* will be returned. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter users to be listed. Only the users for which the expression is *true* will be returned. */
           filter?: string;
           /** The number of users to be listed. */
           count?: number;
@@ -1697,7 +1736,7 @@ declare module "recombee-api-client" {
         optional?: {
           /** ID of the session in which the user viewed the item. Default is `null` (`None`, `nil`, `NULL` etc., depending on the language). */
           sessionId?: string;
-          /** UTC timestamp of the rating as ISO8601-1 pattern or UTC epoch time. The default value is the current time. */
+          /** UTC timestamp of the view portion as ISO8601-1 pattern or UTC epoch time. The default value is the current time. */
           timestamp?: string | number;
           /** Sets whether the given user/item should be created if not present in the database. */
           cascadeCreate?: boolean;
@@ -1813,8 +1852,8 @@ declare module "recombee-api-client" {
      * The most typical use cases are recommendations on the homepage, in some "Picked just for you" section, or in email.
      * The returned items are sorted by relevance (the first item being the most relevant).
      * Besides the recommended items, also a unique `recommId` is returned in the response. It can be used to:
-     * - Let Recombee know that this recommendation was successful (e.g., user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui.html#reported-metrics).
-     * - Get subsequent recommended items when the user scrolls down (*infinite scroll*) or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api.html#recommend-next-items).
+     * - Let Recombee know that this recommendation was successful (e.g., user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui#reported-metrics).
+     * - Get subsequent recommended items when the user scrolls down (*infinite scroll*) or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api#recommend-next-items).
      * It is also possible to use POST HTTP method (for example in the case of a very long ReQL filter) - query parameters then become body parameters.
      */
     export class RecommendItemsToUser extends requests.Request {
@@ -1835,19 +1874,19 @@ declare module "recombee-api-client" {
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
-          /** **Expert option** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
+          /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
-          /** **Expert option** Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations to be appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such a case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
+          /** **Expert option:** Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations to be appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such a case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
           minRelevance?: string;
-          /** **Expert option** If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended items. Default: `0`. */
+          /** **Expert option:** If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended items. Default: `0`. */
           rotationRate?: number;
-          /** **Expert option** Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. Default: `7200.0`. */
+          /** **Expert option:** Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. Default: `7200.0`. */
           rotationTime?: number;
           /** Dictionary of custom options. */
           expertSettings?: { [key: string]: unknown };
@@ -1898,8 +1937,8 @@ declare module "recombee-api-client" {
      * Recommends a set of items that are somehow related to one given item, *X*. A typical scenario is when the user *A* is viewing *X*. Then you may display items to the user that he might also be interested in. Recommend items to item request gives you Top-N such items, optionally taking the target user *A* into account.
      * The returned items are sorted by relevance (the first item being the most relevant).
      * Besides the recommended items, also a unique `recommId` is returned in the response. It can be used to:
-     * - Let Recombee know that this recommendation was successful (e.g., user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui.html#reported-metrics).
-     * - Get subsequent recommended items when the user scrolls down (*infinite scroll*) or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api.html#recommend-next-items).
+     * - Let Recombee know that this recommendation was successful (e.g., user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui#reported-metrics).
+     * - Get subsequent recommended items when the user scrolls down (*infinite scroll*) or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api#recommend-next-items).
      * It is also possible to use POST HTTP method (for example in the case of a very long ReQL filter) - query parameters then become body parameters.
      */
     export class RecommendItemsToItem extends requests.Request {
@@ -1934,21 +1973,21 @@ declare module "recombee-api-client" {
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
-          /** **Expert option** If *targetUserId* parameter is present, the recommendations are biased towards the given user. Using *userImpact*, you may control this bias. For an extreme case of `userImpact=0.0`, the interactions made by the user are not taken into account at all (with the exception of history-based blacklisting), for `userImpact=1.0`, you'll get a user-based recommendation. The default value is `0`. */
+          /** **Expert option:** If *targetUserId* parameter is present, the recommendations are biased towards the given user. Using *userImpact*, you may control this bias. For an extreme case of `userImpact=0.0`, the interactions made by the user are not taken into account at all (with the exception of history-based blacklisting), for `userImpact=1.0`, you'll get a user-based recommendation. The default value is `0`. */
           userImpact?: number;
-          /** **Expert option** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
+          /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
-          /** **Expert option** If the *targetUserId* is provided:  Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations being appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
+          /** **Expert option:** If the *targetUserId* is provided:  Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations being appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
           minRelevance?: string;
-          /** **Expert option** If the *targetUserId* is provided: If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended items. */
+          /** **Expert option:** If the *targetUserId* is provided: If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended items. */
           rotationRate?: number;
-          /** **Expert option** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. */
+          /** **Expert option:** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. */
           rotationTime?: number;
           /** Dictionary of custom options. */
           expertSettings?: { [key: string]: unknown };
@@ -2000,7 +2039,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Recommends Items that are the most relevant to a particular Segment from a context [Segmentation](https://docs.recombee.com/segmentations.html).
+     * Recommends Items that are the most relevant to a particular Segment from a context [Segmentation](https://docs.recombee.com/segmentations).
      * Based on the used Segmentation, this endpoint can be used for example for:
      * - Recommending articles related to a particular topic
      * - Recommending songs belonging to a particular genre
@@ -2035,23 +2074,23 @@ declare module "recombee-api-client" {
         optional?: {
           /** Scenario defines a particular application of recommendations. It can be, for example, "homepage", "cart", or "emailing". */
           scenario?: string;
-          /** If an item of the given *itemId* or user of the given *targetUserId* doesn't exist in the database, it creates the missing entity/entities and returns some (non-personalized) recommendations. This allows, for example, rotations in the following recommendations for the user of the given *targetUserId*, as the user will be already known to the system. */
+          /** If a user of the given *targetUserId* doesn't exist in the database, it creates this user and returns some (non-personalized) recommendations. This allows, for example, rotations in the following recommendations for the user of the given *targetUserId*, as the user will be already known to the system. */
           cascadeCreate?: boolean;
           /** With `returnProperties=true`, property values of the recommended items are returned along with their IDs in a JSON dictionary. The acquired property values can be used to easily display the recommended items to the user.  */
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
-          /** **Expert option** If the *targetUserId* is provided:  Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations being appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
+          /** **Expert option:** If the *targetUserId* is provided:  Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations being appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
           minRelevance?: string;
-          /** **Expert option** If the *targetUserId* is provided: If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended items. */
+          /** **Expert option:** If the *targetUserId* is provided: If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended items. */
           rotationRate?: number;
-          /** **Expert option** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. */
+          /** **Expert option:** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. */
           rotationTime?: number;
           /** Dictionary of custom options. */
           expertSettings?: { [key: string]: unknown };
@@ -2103,10 +2142,10 @@ declare module "recombee-api-client" {
      * Returns items that shall be shown to a user as next recommendations when the user e.g. scrolls the page down (*infinite scroll*) or goes to the next page.
      * It accepts `recommId` of a base recommendation request (e.g., request from the first page) and the number of items that shall be returned (`count`).
      * The base request can be one of:
-     *   - [Recommend Items to Item](https://docs.recombee.com/api.html#recommend-items-to-item)
-     *   - [Recommend Items to User](https://docs.recombee.com/api.html#recommend-items-to-user)
-     *   - [Recommend Items to Item Segment](https://docs.recombee.com/api.html#recommend-items-to-item-segment)
-     *   - [Search Items](https://docs.recombee.com/api.html#search-items)
+     *   - [Recommend Items to Item](https://docs.recombee.com/api#recommend-items-to-item)
+     *   - [Recommend Items to User](https://docs.recombee.com/api#recommend-items-to-user)
+     *   - [Recommend Items to Item Segment](https://docs.recombee.com/api#recommend-items-to-item-segment)
+     *   - [Search Items](https://docs.recombee.com/api#search-items)
      * All the other parameters are inherited from the base request.
      * *Recommend next items* can be called many times for a single `recommId` and each call returns different (previously not recommended) items.
      * The number of *Recommend next items* calls performed so far is returned in the `numberNextRecommsCalls` field.
@@ -2158,19 +2197,19 @@ declare module "recombee-api-client" {
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
-          /** **Expert option** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended users should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
+          /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended users should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
-          /** **Expert option** Specifies the threshold of how relevant must the recommended users be. Possible values one of: "low", "medium", "high". */
+          /** **Expert option:** Specifies the threshold of how relevant must the recommended users be. Possible values one of: "low", "medium", "high". */
           minRelevance?: string;
-          /** **Expert option** If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize a user for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended users. */
+          /** **Expert option:** If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize a user for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended users. */
           rotationRate?: number;
-          /** **Expert option** Taking *rotationRate* into account, specifies how long it takes for a user to recover from the penalization. For example, `rotationTime=7200.0` means that users recommended less than 2 hours ago are penalized. */
+          /** **Expert option:** Taking *rotationRate* into account, specifies how long it takes for a user to recover from the penalization. For example, `rotationTime=7200.0` means that users recommended less than 2 hours ago are penalized. */
           rotationTime?: number;
           /** Dictionary of custom options. */
           expertSettings?: { [key: string]: unknown };
@@ -2240,13 +2279,13 @@ declare module "recombee-api-client" {
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
-          /** **Expert option** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
+          /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
           /** Dictionary of custom options. */
           expertSettings?: { [key: string]: unknown };
@@ -2288,7 +2327,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Recommends the top Segments from a [Segmentation](https://docs.recombee.com/segmentations.html) for a particular user, based on the user's past interactions.
+     * Recommends the top Segments from a [Segmentation](https://docs.recombee.com/segmentations) for a particular user, based on the user's past interactions.
      * Based on the used Segmentation, this endpoint can be used for example for:
      *   - Recommending the top categories for the user
      *   - Recommending the top genres for the user
@@ -2312,9 +2351,9 @@ declare module "recombee-api-client" {
           scenario?: string;
           /** If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows, for example, rotations in the following recommendations for that user, as the user will be already known to the system. */
           cascadeCreate?: boolean;
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended segments based on the `segmentationId`. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to filter recommended segments based on the `segmentationId`. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
@@ -2352,7 +2391,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Recommends Segments from a [Segmentation](https://docs.recombee.com/segmentations.html) that are the most relevant to a particular item.
+     * Recommends Segments from a [Segmentation](https://docs.recombee.com/segmentations) that are the most relevant to a particular item.
      * Based on the used Segmentation, this endpoint can be used for example for:
      *   - Recommending the related categories
      *   - Recommending the related genres
@@ -2390,9 +2429,9 @@ declare module "recombee-api-client" {
           scenario?: string;
           /** If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows, for example, rotations in the following recommendations for that user, as the user will be already known to the system. */
           cascadeCreate?: boolean;
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended segments based on the `segmentationId`. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to filter recommended segments based on the `segmentationId`. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
@@ -2432,7 +2471,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Recommends Segments from a result [Segmentation](https://docs.recombee.com/segmentations.html) that are the most relevant to a particular Segment from a context Segmentation.
+     * Recommends Segments from a result [Segmentation](https://docs.recombee.com/segmentations) that are the most relevant to a particular Segment from a context Segmentation.
      * Based on the used Segmentations, this endpoint can be used for example for:
      *   - Recommending the related brands to particular brand
      *   - Recommending the related brands to particular category
@@ -2469,9 +2508,9 @@ declare module "recombee-api-client" {
           scenario?: string;
           /** If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows, for example, rotations in the following recommendations for that user, as the user will be already known to the system. */
           cascadeCreate?: boolean;
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended segments based on the `segmentationId`. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to filter recommended segments based on the `segmentationId`. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
@@ -2517,8 +2556,8 @@ declare module "recombee-api-client" {
      * This endpoint should be used in a search box on your website/app. It can be called multiple times as the user is typing the query in order to get the most viable suggestions based on the current state of the query, or once after submitting the whole query. 
      * The returned items are sorted by relevance (the first item being the most relevant).
      * Besides the recommended items, also a unique `recommId` is returned in the response. It can be used to:
-     * - Let Recombee know that this search was successful (e.g., user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui.html#reported-metrics).
-     * - Get subsequent search results when the user scrolls down or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api.html#recommend-next-items).
+     * - Let Recombee know that this search was successful (e.g., user clicked one of the recommended items). See [Reported metrics](https://docs.recombee.com/admin_ui#reported-metrics).
+     * - Get subsequent search results when the user scrolls down or goes to the next page. See [Recommend Next Items](https://docs.recombee.com/api#recommend-next-items).
      * It is also possible to use POST HTTP method (for example in the case of a very long ReQL filter) - query parameters then become body parameters.
      */
     export class SearchItems extends requests.Request {
@@ -2541,9 +2580,9 @@ declare module "recombee-api-client" {
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
@@ -2612,9 +2651,9 @@ declare module "recombee-api-client" {
           scenario?: string;
           /** If the user does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows, for example, rotations in the following recommendations for that user, as the user will be already known to the system. */
           cascadeCreate?: boolean;
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to filter recommended segments based on the `segmentationId`. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to filter recommended segments based on the `segmentationId`. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql.html) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression which allows you to boost recommendation rate of some segments based on the `segmentationId`. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
@@ -2654,7 +2693,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Adds a new synonym for the [Search items](https://docs.recombee.com/api.html#search-items).
+     * Adds a new synonym for the [Search items](https://docs.recombee.com/api#search-items).
      * When the `term` is used in the search query, the `synonym` is also used for the full-text search.
      * Unless `oneWay=true`, it works also in the opposite way (`synonym` -> `term`).
      * An example of a synonym can be `science fiction` for the term `sci-fi`.
@@ -2738,7 +2777,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Deletes synonym of the given `id`. This synonym is no longer taken into account in the [Search items](https://docs.recombee.com/api.html#search-items).
+     * Deletes synonym of the given `id`. This synonym is no longer taken into account in the [Search items](https://docs.recombee.com/api#search-items).
      */
     export class DeleteSearchSynonym extends requests.Request {
       /**
@@ -2837,7 +2876,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Segment the items using a [ReQL](https://docs.recombee.com/reql.html) expression.
+     * Segment the items using a [ReQL](https://docs.recombee.com/reql) expression.
      * For each item, the expression should return a set that contains IDs of segments to which the item belongs to.
      */
     export class CreateAutoReqlSegmentation extends requests.Request {
@@ -2914,7 +2953,7 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Segment the items using multiple [ReQL](https://docs.recombee.com/reql.html) filters.
+     * Segment the items using multiple [ReQL](https://docs.recombee.com/reql) filters.
      * Use the Add Manual ReQL Items Segment endpoint to create the individual segments.
      */
     export class CreateManualReqlSegmentation extends requests.Request {
@@ -2984,7 +3023,7 @@ declare module "recombee-api-client" {
 
     /**
      * Adds a new Segment into a Manual ReQL Segmentation.
-     * The new Segment is defined by a [ReQL](https://docs.recombee.com/reql.html) filter that returns `true` for an item in case that this item belongs to the segment.
+     * The new Segment is defined by a [ReQL](https://docs.recombee.com/reql) filter that returns `true` for an item in case that this item belongs to the segment.
      */
     export class AddManualReqlSegment extends requests.Request {
       /**
@@ -3133,6 +3172,25 @@ declare module "recombee-api-client" {
 
       segmentationId: string;
       protected __response_type: string;
+
+      bodyParameters(): {
+      };
+
+      queryParameters(): {
+      };
+    }
+
+    /**
+     * Get all [Scenarios](https://docs.recombee.com/scenarios) of the given database.
+     */
+    export class ListScenarios extends requests.Request {
+      /**
+
+       */
+      constructor(
+      );
+
+      protected __response_type: Scenario[];
 
       bodyParameters(): {
       };
