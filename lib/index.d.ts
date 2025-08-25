@@ -2197,9 +2197,9 @@ declare module "recombee-api-client" {
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended users based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some users based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
@@ -2264,7 +2264,7 @@ declare module "recombee-api-client" {
     export class RecommendUsersToItem extends requests.Request {
       /**
        * @param itemId - ID of the item for which the recommendations are to be generated.
-       * @param count - Number of items to be recommended (N for the top-N recommendation).
+       * @param count - Number of users to be recommended (N for the top-N recommendation).
        * @param optional - Optional parameters given as an object.
        */
       constructor(
@@ -2279,13 +2279,13 @@ declare module "recombee-api-client" {
           returnProperties?: boolean;
           /** Allows specifying which properties should be returned when `returnProperties=true` is set. The properties are given as a comma-separated list. */
           includedProperties?: string[];
-          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended items based on the values of their attributes. */
+          /** Boolean-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to filter recommended users based on the values of their attributes. */
           filter?: string;
-          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some items based on the values of their attributes. */
+          /** Number-returning [ReQL](https://docs.recombee.com/reql) expression, which allows you to boost the recommendation rate of some users based on the values of their attributes. */
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
-          /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
+          /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended users should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
           /** Dictionary of custom options. */
           expertSettings?: { [key: string]: unknown };

@@ -6,21 +6,21 @@ settings:
 
 dependencies:
   jssha:
-    specifier: ^2.3.0
-    version: 2.3.0
+    specifier: 2.4.2
+    version: 2.4.2
   ky:
-    specifier: ^1.7.2
-    version: 1.7.2
+    specifier: 1.7.5
+    version: 1.7.5
 
 devDependencies:
   chai:
-    specifier: ^3.5.0
+    specifier: 3.5.0
     version: 3.5.0
   mocha:
-    specifier: ~10.2.0
+    specifier: 10.2.0
     version: 10.2.0
   typescript:
-    specifier: ~5.3.3
+    specifier: 5.3.3
     version: 5.3.3
 
 packages:
@@ -240,6 +240,7 @@ packages:
 
   /glob@7.2.0:
     resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -261,6 +262,7 @@ packages:
 
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -316,13 +318,13 @@ packages:
       argparse: 2.0.1
     dev: true
 
-  /jssha@2.3.0:
-    resolution: {integrity: sha512-fEU7J0WExYrq/Otc4BuD0MKp8rlcpmcidELEfrUD0ich5cr3ryq7s+X2FdABq0iGic3HIFT72pTXUnvWC/s0/A==}
+  /jssha@2.4.2:
+    resolution: {integrity: sha512-/jsi/9C0S70zfkT/4UlKQa5E1xKurDnXcQizcww9JSR/Fv+uIbWM2btG+bFcL3iNoK9jIGS0ls9HWLr1iw0kFg==}
     deprecated: jsSHA versions < 3.0.0 will no longer receive feature updates
     dev: false
 
-  /ky@1.7.2:
-    resolution: {integrity: sha512-OzIvbHKKDpi60TnF9t7UUVAF1B4mcqc02z5PIvrm08Wyb+yOcz63GRvEuVxNT18a9E1SrNouhB4W2NNLeD7Ykg==}
+  /ky@1.7.5:
+    resolution: {integrity: sha512-HzhziW6sc5m0pwi5M196+7cEBtbt0lCYi67wNsiwMUmz833wloE0gbzJPWKs1gliFKQb34huItDQX97LyOdPdA==}
     engines: {node: '>=18'}
     dev: false
 
