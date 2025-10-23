@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,13 +25,13 @@ describe('AddUserProperty', function(){
     req = new rqs.AddUserProperty('number','int');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         req = new rqs.AddUserProperty('str','string');
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.fail();
+            assert.fail();
           }
           else {
             done();
@@ -46,12 +46,12 @@ describe('AddUserProperty', function(){
     req = new rqs.AddUserProperty('prop','integer');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 400);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 400);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });
@@ -61,17 +61,17 @@ describe('AddUserProperty', function(){
     req = new rqs.AddUserProperty('number2','int');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.equal(err.name, 'ResponseError');
-            chai.equal(err.statusCode, 409);
+            assert.equal(err.name, 'ResponseError');
+            assert.equal(err.statusCode, 409);
             done();
           }
           else {
-            chai.fail();
+            assert.fail();
           }
         }));
       }

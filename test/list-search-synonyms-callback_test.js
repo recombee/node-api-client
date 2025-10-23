@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,23 +25,23 @@ describe('ListSearchSynonyms', function(){
     req2 = new rqs.AddSearchSynonym('sci-fi','science fiction');
     env.client.send(req2,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         req = new rqs.ListSearchSynonyms();
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.fail();
+            assert.fail();
           }
           else {
-            chai.equal(res['synonyms'].length, 1);
+            assert.equal(res['synonyms'].length, 1);
             req = new rqs.ListSearchSynonyms({'count': 10,'offset': 1});
             env.client.send(req,((err,res) => {
               if(err) {
-                chai.fail();
+                assert.fail();
               }
               else {
-                chai.equal(res['synonyms'].length, 0);
+                assert.equal(res['synonyms'].length, 0);
                 done();
               }
             }));

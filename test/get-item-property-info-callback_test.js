@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,17 +25,17 @@ describe('GetItemPropertyInfo', function(){
     req = new rqs.GetItemPropertyInfo('int_property');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
-        chai.deepEqual('int', res['type']);
+        assert.deepEqual('int', res['type']);
         req = new rqs.GetItemPropertyInfo('str_property');
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.fail();
+            assert.fail();
           }
           else {
-            chai.deepEqual('string', res['type']);
+            assert.deepEqual('string', res['type']);
             done();
           }
         }));

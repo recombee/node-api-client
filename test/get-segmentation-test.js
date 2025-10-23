@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -28,7 +28,7 @@ describe('GetSegmentation', function(){
       req = new rqs.GetSegmentation('seg1');
       env.client.send(req)
       .then((res) => {
-        chai.deepEqual('seg1', res['segmentationId']);
+        assert.deepEqual('seg1', res['segmentationId']);
         done();
       });
     });

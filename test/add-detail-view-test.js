@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -52,12 +52,12 @@ describe('AddDetailView', function(){
     req = new rqs.AddDetailView('entity_id','nonex_id');
     env.client.send(req)
     .then((res) => {
-      chai.fail();
+      assert.fail();
       done();
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.statusCode, 404);
         done();
       }
       throw err;
@@ -69,12 +69,12 @@ describe('AddDetailView', function(){
     req = new rqs.AddDetailView('nonex_id','entity_id');
     env.client.send(req)
     .then((res) => {
-      chai.fail();
+      assert.fail();
       done();
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.statusCode, 404);
         done();
       }
       throw err;
@@ -88,12 +88,12 @@ describe('AddDetailView', function(){
     .then((res) => {
       env.client.send(req)
       .then((res) => {
-        chai.fail();
+        assert.fail();
         done();
       })
       .catch((err) => {
         if (err instanceof recombee.errors.ResponseError) {
-          chai.equal(err.statusCode, 409);
+          assert.equal(err.statusCode, 409);
           done();
         }
         throw err;

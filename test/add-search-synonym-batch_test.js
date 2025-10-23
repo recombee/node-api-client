@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -27,10 +27,10 @@ describe('AddSearchSynonym', function(){
     
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-        chai.equal(responses[0].code, 201);
-        chai.deepEqual('sci-fi', responses[0].json['term']);
-        chai.deepEqual('science fiction', responses[0].json['synonym']);
-        chai.equal(responses[1].code, 409);
+        assert.equal(responses[0].code, 201);
+        assert.deepEqual('sci-fi', responses[0].json['term']);
+        assert.deepEqual('science fiction', responses[0].json['synonym']);
+        assert.equal(responses[1].code, 409);
       done();
     });
   });

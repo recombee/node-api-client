@@ -22,7 +22,7 @@ declare module "recombee-api-client" {
       timeout: number;
       ensureHttps: boolean;
 
-      protected __response_type: any;
+      protected __response_type: unknown;
     }
 
     export class SetValuesOptions {
@@ -205,7 +205,7 @@ declare module "recombee-api-client" {
 
   export type BatchResponse = {
     code: number;
-    json: any;
+    json: unknown;
   }[]
 
   /**
@@ -333,6 +333,7 @@ declare module "recombee-api-client" {
     cascadeCreate?: boolean;
     recommId?: string;
     additionalData?: Record<string, unknown>;
+    autoPresented?: boolean;
   }
 
   export type Purchase = {
@@ -386,11 +387,14 @@ declare module "recombee-api-client" {
     cascadeCreate?: boolean;
     recommId?: string;
     additionalData?: Record<string, unknown>;
+    autoPresented?: boolean;
+    timeSpent?: number;
   }
 
   export type Recommendation = {
     id: string;
     values?: Record<string, EntityProperty>;
+    reqlEvaluations?: Record<string, unknown>;
   }
 
   export type RecommendationResponse = {
@@ -398,6 +402,13 @@ declare module "recombee-api-client" {
     recomms: Recommendation[];
     numberNextRecommsCalls?: number;
     abGroup?: string;
+  }
+
+  export type CompositeRecommendationResponse = {
+    recommId: string;
+    source: Recommendation;
+    recomms: Recommendation[];
+    numberNextRecommsCalls?: number;
   }
 
   export type SearchResponse = {
@@ -654,16 +665,16 @@ declare module "recombee-api-client" {
        */
       constructor(
         filter: string,
-        changes: { [key: string]: unknown },
+        changes: Record<string, unknown>,
       );
 
       filter: string;
-      changes: { [key: string]: unknown };
+      changes: Record<string, unknown>;
       protected __response_type: UpdateMoreItemsResponse;
 
       bodyParameters(): {
         filter: string;
-        changes: { [key: string]: unknown };
+        changes: Record<string, unknown>;
       };
 
       queryParameters(): {
@@ -1112,7 +1123,9 @@ declare module "recombee-api-client" {
           /** If this detail view is based on a recommendation request, `recommId` is the id of the clicked recommendation. */
           recommId?: string;
           /** A dictionary of additional data for the interaction. */
-          additionalData?: { [key: string]: unknown };
+          additionalData?: Record<string, unknown>;
+          /** Indicates whether the item was automatically presented to the user (e.g., in a swiping feed) or explicitly requested by the user (e.g., by clicking on a link). Defaults to `false`. */
+          autoPresented?: boolean;
         }
       );
 
@@ -1122,7 +1135,8 @@ declare module "recombee-api-client" {
       duration?: number;
       cascadeCreate?: boolean;
       recommId?: string;
-      additionalData?: { [key: string]: unknown };
+      additionalData?: Record<string, unknown>;
+      autoPresented?: boolean;
       protected __response_type: string;
 
       bodyParameters(): {
@@ -1132,7 +1146,8 @@ declare module "recombee-api-client" {
         duration?: number;
         cascadeCreate?: boolean;
         recommId?: string;
-        additionalData?: { [key: string]: unknown };
+        additionalData?: Record<string, unknown>;
+        autoPresented?: boolean;
       };
 
       queryParameters(): {
@@ -1240,7 +1255,7 @@ declare module "recombee-api-client" {
           /** If this purchase is based on a recommendation request, `recommId` is the id of the clicked recommendation. */
           recommId?: string;
           /** A dictionary of additional data for the interaction. */
-          additionalData?: { [key: string]: unknown };
+          additionalData?: Record<string, unknown>;
         }
       );
 
@@ -1252,7 +1267,7 @@ declare module "recombee-api-client" {
       price?: number;
       profit?: number;
       recommId?: string;
-      additionalData?: { [key: string]: unknown };
+      additionalData?: Record<string, unknown>;
       protected __response_type: string;
 
       bodyParameters(): {
@@ -1264,7 +1279,7 @@ declare module "recombee-api-client" {
         price?: number;
         profit?: number;
         recommId?: string;
-        additionalData?: { [key: string]: unknown };
+        additionalData?: Record<string, unknown>;
       };
 
       queryParameters(): {
@@ -1368,7 +1383,7 @@ declare module "recombee-api-client" {
           /** If this rating is based on a recommendation request, `recommId` is the id of the clicked recommendation. */
           recommId?: string;
           /** A dictionary of additional data for the interaction. */
-          additionalData?: { [key: string]: unknown };
+          additionalData?: Record<string, unknown>;
         }
       );
 
@@ -1378,7 +1393,7 @@ declare module "recombee-api-client" {
       timestamp?: string | number;
       cascadeCreate?: boolean;
       recommId?: string;
-      additionalData?: { [key: string]: unknown };
+      additionalData?: Record<string, unknown>;
       protected __response_type: string;
 
       bodyParameters(): {
@@ -1388,7 +1403,7 @@ declare module "recombee-api-client" {
         timestamp?: string | number;
         cascadeCreate?: boolean;
         recommId?: string;
-        additionalData?: { [key: string]: unknown };
+        additionalData?: Record<string, unknown>;
       };
 
       queryParameters(): {
@@ -1494,7 +1509,7 @@ declare module "recombee-api-client" {
           /** If this cart addition is based on a recommendation request, `recommId` is the id of the clicked recommendation. */
           recommId?: string;
           /** A dictionary of additional data for the interaction. */
-          additionalData?: { [key: string]: unknown };
+          additionalData?: Record<string, unknown>;
         }
       );
 
@@ -1505,7 +1520,7 @@ declare module "recombee-api-client" {
       amount?: number;
       price?: number;
       recommId?: string;
-      additionalData?: { [key: string]: unknown };
+      additionalData?: Record<string, unknown>;
       protected __response_type: string;
 
       bodyParameters(): {
@@ -1516,7 +1531,7 @@ declare module "recombee-api-client" {
         amount?: number;
         price?: number;
         recommId?: string;
-        additionalData?: { [key: string]: unknown };
+        additionalData?: Record<string, unknown>;
       };
 
       queryParameters(): {
@@ -1618,7 +1633,7 @@ declare module "recombee-api-client" {
           /** If this bookmark is based on a recommendation request, `recommId` is the id of the clicked recommendation. */
           recommId?: string;
           /** A dictionary of additional data for the interaction. */
-          additionalData?: { [key: string]: unknown };
+          additionalData?: Record<string, unknown>;
         }
       );
 
@@ -1627,7 +1642,7 @@ declare module "recombee-api-client" {
       timestamp?: string | number;
       cascadeCreate?: boolean;
       recommId?: string;
-      additionalData?: { [key: string]: unknown };
+      additionalData?: Record<string, unknown>;
       protected __response_type: string;
 
       bodyParameters(): {
@@ -1636,7 +1651,7 @@ declare module "recombee-api-client" {
         timestamp?: string | number;
         cascadeCreate?: boolean;
         recommId?: string;
-        additionalData?: { [key: string]: unknown };
+        additionalData?: Record<string, unknown>;
       };
 
       queryParameters(): {
@@ -1743,7 +1758,11 @@ declare module "recombee-api-client" {
           /** If this view portion is based on a recommendation request, `recommId` is the id of the clicked recommendation. */
           recommId?: string;
           /** A dictionary of additional data for the interaction. */
-          additionalData?: { [key: string]: unknown };
+          additionalData?: Record<string, unknown>;
+          /** Indicates whether the item was automatically presented to the user (e.g., in a swiping feed) or explicitly requested by the user (e.g., by clicking on a link). Defaults to `false`. */
+          autoPresented?: boolean;
+          /** The duration (in seconds) that the user viewed the item. In update requests, this value may only increase and is required only if it has changed. */
+          timeSpent?: number;
         }
       );
 
@@ -1754,7 +1773,9 @@ declare module "recombee-api-client" {
       timestamp?: string | number;
       cascadeCreate?: boolean;
       recommId?: string;
-      additionalData?: { [key: string]: unknown };
+      additionalData?: Record<string, unknown>;
+      autoPresented?: boolean;
+      timeSpent?: number;
       protected __response_type: string;
 
       bodyParameters(): {
@@ -1765,7 +1786,9 @@ declare module "recombee-api-client" {
         timestamp?: string | number;
         cascadeCreate?: boolean;
         recommId?: string;
-        additionalData?: { [key: string]: unknown };
+        additionalData?: Record<string, unknown>;
+        autoPresented?: boolean;
+        timeSpent?: number;
       };
 
       queryParameters(): {
@@ -1880,6 +1903,8 @@ declare module "recombee-api-client" {
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended item. */
+          reqlExpressions?: Record<string, string>;
           /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
           /** **Expert option:** Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations to be appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such a case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
@@ -1889,7 +1914,7 @@ declare module "recombee-api-client" {
           /** **Expert option:** Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. Default: `7200.0`. */
           rotationTime?: number;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -1904,11 +1929,12 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
+      reqlExpressions?: Record<string, string>;
       diversity?: number;
       minRelevance?: string;
       rotationRate?: number;
       rotationTime?: number;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -1921,11 +1947,12 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
+        reqlExpressions?: Record<string, string>;
         diversity?: number;
         minRelevance?: string;
         rotationRate?: number;
         rotationTime?: number;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -1979,6 +2006,8 @@ declare module "recombee-api-client" {
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended item. */
+          reqlExpressions?: Record<string, string>;
           /** **Expert option:** If *targetUserId* parameter is present, the recommendations are biased towards the given user. Using *userImpact*, you may control this bias. For an extreme case of `userImpact=0.0`, the interactions made by the user are not taken into account at all (with the exception of history-based blacklisting), for `userImpact=1.0`, you'll get a user-based recommendation. The default value is `0`. */
           userImpact?: number;
           /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended items should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
@@ -1990,7 +2019,7 @@ declare module "recombee-api-client" {
           /** **Expert option:** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. */
           rotationTime?: number;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2006,12 +2035,13 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
+      reqlExpressions?: Record<string, string>;
       userImpact?: number;
       diversity?: number;
       minRelevance?: string;
       rotationRate?: number;
       rotationTime?: number;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -2025,12 +2055,13 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
+        reqlExpressions?: Record<string, string>;
         userImpact?: number;
         diversity?: number;
         minRelevance?: string;
         rotationRate?: number;
         rotationTime?: number;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -2086,6 +2117,8 @@ declare module "recombee-api-client" {
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended item. */
+          reqlExpressions?: Record<string, string>;
           /** **Expert option:** If the *targetUserId* is provided:  Specifies the threshold of how relevant must the recommended items be to the user. Possible values one of: "low", "medium", "high". The default value is "low", meaning that the system attempts to recommend a number of items equal to *count* at any cost. If there is not enough data (such as interactions or item properties), this may even lead to bestseller-based recommendations being appended to reach the full *count*. This behavior may be suppressed by using "medium" or "high" values. In such case, the system only recommends items of at least the requested relevance and may return less than *count* items when there is not enough data to fulfill it. */
           minRelevance?: string;
           /** **Expert option:** If the *targetUserId* is provided: If your users browse the system in real-time, it may easily happen that you wish to offer them recommendations multiple times. Here comes the question: how much should the recommendations change? Should they remain the same, or should they rotate? Recombee API allows you to control this per request in a backward fashion. You may penalize an item for being recommended in the near past. For the specific user, `rotationRate=1` means maximal rotation, `rotationRate=0` means absolutely no rotation. You may also use, for example, `rotationRate=0.2` for only slight rotation of recommended items. */
@@ -2093,7 +2126,7 @@ declare module "recombee-api-client" {
           /** **Expert option:** If the *targetUserId* is provided: Taking *rotationRate* into account, specifies how long it takes for an item to recover from the penalization. For example, `rotationTime=7200.0` means that items recommended less than 2 hours ago are penalized. */
           rotationTime?: number;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2109,10 +2142,11 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
+      reqlExpressions?: Record<string, string>;
       minRelevance?: string;
       rotationRate?: number;
       rotationTime?: number;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -2127,10 +2161,11 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
+        reqlExpressions?: Record<string, string>;
         minRelevance?: string;
         rotationRate?: number;
         rotationTime?: number;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -2203,6 +2238,8 @@ declare module "recombee-api-client" {
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended user. */
+          reqlExpressions?: Record<string, string>;
           /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended users should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
           /** **Expert option:** Specifies the threshold of how relevant must the recommended users be. Possible values one of: "low", "medium", "high". */
@@ -2212,7 +2249,7 @@ declare module "recombee-api-client" {
           /** **Expert option:** Taking *rotationRate* into account, specifies how long it takes for a user to recover from the penalization. For example, `rotationTime=7200.0` means that users recommended less than 2 hours ago are penalized. */
           rotationTime?: number;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2227,11 +2264,12 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
+      reqlExpressions?: Record<string, string>;
       diversity?: number;
       minRelevance?: string;
       rotationRate?: number;
       rotationTime?: number;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -2244,11 +2282,12 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
+        reqlExpressions?: Record<string, string>;
         diversity?: number;
         minRelevance?: string;
         rotationRate?: number;
         rotationTime?: number;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -2285,10 +2324,12 @@ declare module "recombee-api-client" {
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended user. */
+          reqlExpressions?: Record<string, string>;
           /** **Expert option:** Real number from [0.0, 1.0], which determines how mutually dissimilar the recommended users should be. The default value is 0.0, i.e., no diversification. Value 1.0 means maximal diversification. */
           diversity?: number;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2303,8 +2344,9 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
+      reqlExpressions?: Record<string, string>;
       diversity?: number;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -2317,8 +2359,9 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
+        reqlExpressions?: Record<string, string>;
         diversity?: number;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -2358,7 +2401,7 @@ declare module "recombee-api-client" {
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2371,7 +2414,7 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -2382,7 +2425,7 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -2436,7 +2479,7 @@ declare module "recombee-api-client" {
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2450,7 +2493,7 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -2462,7 +2505,7 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -2515,7 +2558,7 @@ declare module "recombee-api-client" {
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2529,7 +2572,7 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: RecommendationResponse;
 
@@ -2542,8 +2585,88 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
+      };
+
+      queryParameters(): {
+      };
+    }
+
+    /**
+     * Composite Recommendation returns both a *source entity* (e.g., an Item or [Item Segment](https://docs.recombee.com/segmentations.html)) and a list of related recommendations in a single response.
+     * It is ideal for use cases such as personalized homepage sections (*Articles from <category>*), *Because You Watched <movie>*, or *Artists Related to Your Favorite Artist <artist>*.
+     * See detailed **examples and configuration guidance** in the [Composite Scenarios documentation](https://docs.recombee.com/scenarios#composite-recommendations).
+     * **Structure**
+     * The endpoint operates in two stages:
+     * 1. Recommends the *source* (e.g., an Item Segment or item) to the user.
+     * 2. Recommends *results* (items or Item Segments) related to that *source*.
+     * For example, *Articles from <category>* can be decomposed into:
+     *   - [Recommend Item Segments To User](https://docs.recombee.com/api#recommend-item-segments-to-user) to find the category.
+     *   - [Recommend Items To Item Segment](https://docs.recombee.com/api#recommend-items-to-item-segment) to recommend articles from that category.
+     * Since the first step uses [Recommend Item Segments To User](https://docs.recombee.com/api#recommend-items-to-user), you must include the `userId` parameter in the *Composite Recommendation* request.
+     * Each *Composite Recommendation* counts as a single recommendation API request for billing.
+     * **Stage-specific Parameters**
+     * Additional parameters can be supplied via [sourceSettings](https://docs.recombee.com/api#composite-recommendation-param-sourceSettings) and [resultSettings](https://docs.recombee.com/api#composite-recommendation-param-resultSettings).
+     * In the example above:
+     *   - `sourceSettings` may include any parameter valid for [Recommend Item Segments To User](https://docs.recombee.com/api#recommend-items-to-user) (e.g., `filter`, `booster`).
+     *   - `resultSettings` may include any parameter valid for [Recommend Items To Item Segment](https://docs.recombee.com/api#recommend-items-to-item-segment).
+     * See [this example](https://docs.recombee.com/api#composite-recommendation-example-setting-parameters-for-individual-stages) for more details.
+     */
+    export class CompositeRecommendation extends requests.Request {
+      /**
+       * @param scenario - Scenario defines a particular application of recommendations. It can be, for example, "homepage", "cart", or "emailing".
+       * You can set various settings to the [scenario](https://docs.recombee.com/scenarios) in the [Admin UI](https://admin.recombee.com). You can also see the performance of each scenario in the Admin UI separately, so you can check how well each application performs.
+       * The AI that optimizes models to get the best results may optimize different scenarios separately or even use different models in each of the scenarios.
+       * @param count - Number of items to be recommended (N for the top-N recommendation).
+       * @param optional - Optional parameters given as an object.
+       */
+      constructor(
+        scenario: string,
+        count: number,
+        optional?: {
+          /** ID of the item for which the recommendations are to be generated. */
+          itemId?: string;
+          /** ID of the user for which the recommendations are to be generated. */
+          userId?: string;
+          /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
+          logic?: string | object;
+          /** ID of the segment from `contextSegmentationId` for which the recommendations are to be generated. */
+          segmentId?: string;
+          /** If the entity for the source recommendation does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows, for example, rotations in the following recommendations for that entity, as the entity will be already known to the system. */
+          cascadeCreate?: boolean;
+          /** Parameters applied for recommending the *Source* stage. The accepted parameters correspond with the recommendation sub-endpoint used to recommend the *Source*. */
+          sourceSettings?: Record<string, unknown>;
+          /** Parameters applied for recommending the *Result* stage. The accepted parameters correspond with the recommendation sub-endpoint used to recommend the *Result*. */
+          resultSettings?: Record<string, unknown>;
+          /** Dictionary of custom options. */
+          expertSettings?: Record<string, unknown>;
+        }
+      );
+
+      scenario: string;
+      count: number;
+      itemId?: string;
+      userId?: string;
+      logic?: string | object;
+      segmentId?: string;
+      cascadeCreate?: boolean;
+      sourceSettings?: Record<string, unknown>;
+      resultSettings?: Record<string, unknown>;
+      expertSettings?: Record<string, unknown>;
+      protected __response_type: CompositeRecommendationResponse;
+
+      bodyParameters(): {
+        scenario: string;
+        count: number;
+        itemId?: string;
+        userId?: string;
+        logic?: string | object;
+        segmentId?: string;
+        cascadeCreate?: boolean;
+        sourceSettings?: Record<string, unknown>;
+        resultSettings?: Record<string, unknown>;
+        expertSettings?: Record<string, unknown>;
       };
 
       queryParameters(): {
@@ -2586,8 +2709,10 @@ declare module "recombee-api-client" {
           booster?: string;
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended item. */
+          reqlExpressions?: Record<string, string>;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2603,7 +2728,8 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
-      expertSettings?: { [key: string]: unknown };
+      reqlExpressions?: Record<string, string>;
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: SearchResponse;
 
@@ -2617,7 +2743,8 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
-        expertSettings?: { [key: string]: unknown };
+        reqlExpressions?: Record<string, string>;
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 
@@ -2658,7 +2785,7 @@ declare module "recombee-api-client" {
           /** Logic specifies the particular behavior of the recommendation models. You can pick tailored logic for your domain and use case. */
           logic?: string | object;
           /** Dictionary of custom options. */
-          expertSettings?: { [key: string]: unknown };
+          expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
         }
@@ -2672,7 +2799,7 @@ declare module "recombee-api-client" {
       filter?: string;
       booster?: string;
       logic?: string | object;
-      expertSettings?: { [key: string]: unknown };
+      expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
       protected __response_type: SearchResponse;
 
@@ -2684,7 +2811,7 @@ declare module "recombee-api-client" {
         filter?: string;
         booster?: string;
         logic?: string | object;
-        expertSettings?: { [key: string]: unknown };
+        expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
       };
 

@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -26,9 +26,9 @@ describe('ListItemRatings', function(){
     req = new rqs.ListItemRatings('item');
     env.client.send(req)
     .then((res) => {
-      chai.equal(res.length, 1);
-      chai.deepEqual('item', res[0]['itemId']);
-      chai.deepEqual('user', res[0]['userId']);
+      assert.equal(res.length, 1);
+      assert.deepEqual('item', res[0]['itemId']);
+      assert.deepEqual('user', res[0]['userId']);
       done();
     });
   });

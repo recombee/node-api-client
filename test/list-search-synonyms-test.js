@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -28,11 +28,11 @@ describe('ListSearchSynonyms', function(){
       req = new rqs.ListSearchSynonyms();
       env.client.send(req)
       .then((res) => {
-        chai.equal(res['synonyms'].length, 1);
+        assert.equal(res['synonyms'].length, 1);
         req = new rqs.ListSearchSynonyms({'count': 10,'offset': 1});
         env.client.send(req)
         .then((res) => {
-          chai.equal(res['synonyms'].length, 0);
+          assert.equal(res['synonyms'].length, 0);
           done();
         });
       });

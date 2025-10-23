@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -22,12 +22,12 @@ describe('InsertToSeries', function(){
   it ('works in batch', (done) => {
     env.client.send(new rqs.AddItem('new_item'),((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         env.client.send(new rqs.AddItem('new_item3'),((err,res) => {
           if(err) {
-            chai.fail();
+            assert.fail();
           }
           else {
             let requests = [
@@ -39,10 +39,10 @@ describe('InsertToSeries', function(){
             
             env.client.send(new rqs.Batch(requests))
             .then((responses) => {
-                chai.equal(responses[0].code, 200);
-                chai.equal(responses[1].code, 200);
-                chai.equal(responses[2].code, 200);
-                chai.equal(responses[3].code, 409);
+                assert.equal(responses[0].code, 200);
+                assert.equal(responses[1].code, 200);
+                assert.equal(responses[2].code, 200);
+                assert.equal(responses[3].code, 409);
               done();
             });
           }

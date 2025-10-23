@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,7 +25,7 @@ describe('DeleteAllSearchSynonyms', function(){
     req = new rqs.DeleteAllSearchSynonyms();
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();

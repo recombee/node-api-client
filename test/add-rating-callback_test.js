@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,7 +25,7 @@ describe('AddRating', function(){
     req = new rqs.AddRating('u_id','i_id',1,{'cascadeCreate': true,'additionalData': {'answer': 42}});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -38,7 +38,7 @@ describe('AddRating', function(){
     req = new rqs.AddRating('entity_id','entity_id',0);
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -51,12 +51,12 @@ describe('AddRating', function(){
     req = new rqs.AddRating('entity_id','nonex_id',-1);
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 404);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });
@@ -66,12 +66,12 @@ describe('AddRating', function(){
     req = new rqs.AddRating('nonex_id','entity_id',0.5);
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 404);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });
@@ -81,12 +81,12 @@ describe('AddRating', function(){
     req = new rqs.AddRating('entity_id','entity_id',-2);
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 400);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 400);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });
@@ -96,17 +96,17 @@ describe('AddRating', function(){
     req = new rqs.AddRating('u_id','i_id',0.3,{'cascadeCreate': true,'timestamp': 5});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.equal(err.name, 'ResponseError');
-            chai.equal(err.statusCode, 409);
+            assert.equal(err.name, 'ResponseError');
+            assert.equal(err.statusCode, 409);
             done();
           }
           else {
-            chai.fail();
+            assert.fail();
           }
         }));
       }

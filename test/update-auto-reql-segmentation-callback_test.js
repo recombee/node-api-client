@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,13 +25,13 @@ describe('UpdateAutoReqlSegmentation', function(){
     req2 = new rqs.CreateAutoReqlSegmentation('seg1','items','{\'str_property\'}',{'title': 'Test Segmentation','description': 'For test purposes'});
     env.client.send(req2,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         req = new rqs.UpdateAutoReqlSegmentation('seg1',{'title': 'New title','expression': '{\'str_property\' + \'str_property\'}','description': 'Updated'});
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.fail();
+            assert.fail();
           }
           else {
             done();

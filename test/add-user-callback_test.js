@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,7 +25,7 @@ describe('AddUser', function(){
     req = new rqs.AddUser('valid_id');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -38,12 +38,12 @@ describe('AddUser', function(){
     req = new rqs.AddUser('***not_valid$$$');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 400);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 400);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });
@@ -53,17 +53,17 @@ describe('AddUser', function(){
     req = new rqs.AddUser('valid_id2');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.equal(err.name, 'ResponseError');
-            chai.equal(err.statusCode, 409);
+            assert.equal(err.name, 'ResponseError');
+            assert.equal(err.statusCode, 409);
             done();
           }
           else {
-            chai.fail();
+            assert.fail();
           }
         }));
       }

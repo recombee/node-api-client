@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -30,11 +30,11 @@ describe('AddUserProperty', function(){
     
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-        chai.equal(responses[0].code, 201);
-        chai.equal(responses[1].code, 201);
-        chai.equal(responses[2].code, 400);
-        chai.equal(responses[3].code, 201);
-        chai.equal(responses[4].code, 409);
+        assert.equal(responses[0].code, 201);
+        assert.equal(responses[1].code, 201);
+        assert.equal(responses[2].code, 400);
+        assert.equal(responses[3].code, 201);
+        assert.equal(responses[4].code, 409);
       done();
     });
   });

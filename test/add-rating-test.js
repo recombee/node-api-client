@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -43,12 +43,12 @@ describe('AddRating', function(){
     req = new rqs.AddRating('entity_id','nonex_id',-1);
     env.client.send(req)
     .then((res) => {
-      chai.fail();
+      assert.fail();
       done();
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.statusCode, 404);
         done();
       }
       throw err;
@@ -60,12 +60,12 @@ describe('AddRating', function(){
     req = new rqs.AddRating('nonex_id','entity_id',0.5);
     env.client.send(req)
     .then((res) => {
-      chai.fail();
+      assert.fail();
       done();
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.statusCode, 404);
         done();
       }
       throw err;
@@ -77,12 +77,12 @@ describe('AddRating', function(){
     req = new rqs.AddRating('entity_id','entity_id',-2);
     env.client.send(req)
     .then((res) => {
-      chai.fail();
+      assert.fail();
       done();
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 400);
+        assert.equal(err.statusCode, 400);
         done();
       }
       throw err;
@@ -96,12 +96,12 @@ describe('AddRating', function(){
     .then((res) => {
       env.client.send(req)
       .then((res) => {
-        chai.fail();
+        assert.fail();
         done();
       })
       .catch((err) => {
         if (err instanceof recombee.errors.ResponseError) {
-          chai.equal(err.statusCode, 409);
+          assert.equal(err.statusCode, 409);
           done();
         }
         throw err;

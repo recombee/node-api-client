@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -22,7 +22,7 @@ describe('AddManualReqlSegment', function(){
   it ('works in batch', (done) => {
     env.client.send(new rqs.CreateManualReqlSegmentation('seg1','items',{'title': 'Test Segmentation','description': 'For test purposes'}),((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         let requests = [
@@ -31,7 +31,7 @@ describe('AddManualReqlSegment', function(){
         
         env.client.send(new rqs.Batch(requests))
         .then((responses) => {
-            chai.equal(responses[0].code, 201);
+            assert.equal(responses[0].code, 201);
           done();
         });
       }

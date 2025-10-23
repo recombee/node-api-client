@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,7 +25,7 @@ describe('RemoveFromSeries', function(){
     req = new rqs.RemoveFromSeries('entity_id','item','entity_id');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -38,12 +38,12 @@ describe('RemoveFromSeries', function(){
     req = new rqs.RemoveFromSeries('entity_id','item','not_contained');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 404);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });

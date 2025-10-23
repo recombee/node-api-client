@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -26,7 +26,7 @@ describe('RecommendItemsToItem', function(){
     req = new rqs.RecommendItemsToItem('entity_id','entity_id',9);
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -39,7 +39,7 @@ describe('RecommendItemsToItem', function(){
     req = new rqs.RecommendItemsToItem('nonexisting','entity_id',9,{'cascadeCreate': true});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -52,7 +52,7 @@ describe('RecommendItemsToItem', function(){
     req = new rqs.RecommendItemsToItem('nonexisting2','entity_id',9,{'cascadeCreate': true,'expertSettings': {}});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();

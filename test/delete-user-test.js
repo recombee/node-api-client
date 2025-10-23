@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -27,12 +27,12 @@ describe('DeleteUser', function(){
     .then((res) => {
       env.client.send(req)
       .then((res) => {
-        chai.fail();
+        assert.fail();
         done();
       })
       .catch((err) => {
         if (err instanceof recombee.errors.ResponseError) {
-          chai.equal(err.statusCode, 404);
+          assert.equal(err.statusCode, 404);
           done();
         }
         throw err;
@@ -45,12 +45,12 @@ describe('DeleteUser', function(){
     req = new rqs.DeleteUser('***not_valid$$$');
     env.client.send(req)
     .then((res) => {
-      chai.fail();
+      assert.fail();
       done();
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 400);
+        assert.equal(err.statusCode, 400);
         done();
       }
       throw err;
@@ -62,12 +62,12 @@ describe('DeleteUser', function(){
     req = new rqs.DeleteUser('valid_id');
     env.client.send(req)
     .then((res) => {
-      chai.fail();
+      assert.fail();
       done();
     })
     .catch((err) => {
       if (err instanceof recombee.errors.ResponseError) {
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.statusCode, 404);
         done();
       }
       throw err;

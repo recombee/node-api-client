@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,13 +25,13 @@ describe('UpdatePropertyBasedSegmentation', function(){
     req2 = new rqs.CreatePropertyBasedSegmentation('seg1','items','str_property');
     env.client.send(req2,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         req = new rqs.UpdatePropertyBasedSegmentation('seg1',{'title': 'New title','propertyName': 'str_property','description': 'Updated'});
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.fail();
+            assert.fail();
           }
           else {
             done();

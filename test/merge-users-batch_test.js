@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -22,7 +22,7 @@ describe('MergeUsers', function(){
   it ('works in batch', (done) => {
     env.client.send(new rqs.AddUser('target'),((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         let requests = [
@@ -32,8 +32,8 @@ describe('MergeUsers', function(){
         
         env.client.send(new rqs.Batch(requests))
         .then((responses) => {
-            chai.equal(responses[0].code, 200);
-            chai.equal(responses[1].code, 404);
+            assert.equal(responses[0].code, 200);
+            assert.equal(responses[1].code, 404);
           done();
         });
       }

@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -26,7 +26,7 @@ describe('RecommendUsersToUser', function(){
     req = new rqs.RecommendUsersToUser('entity_id',9);
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -39,7 +39,7 @@ describe('RecommendUsersToUser', function(){
     req = new rqs.RecommendUsersToUser('nonexisting',9,{'cascadeCreate': true});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -52,7 +52,20 @@ describe('RecommendUsersToUser', function(){
     req = new rqs.RecommendUsersToUser('nonexisting2',9,{'cascadeCreate': true,'expertSettings': {}});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
+      }
+      else {
+        done();
+      }
+    }));
+  });
+  
+  it ('recommends with reql expressions', (done) => {
+    let req, req2, resp;
+    req = new rqs.RecommendUsersToUser('nonexisting2',9,{'cascadeCreate': true,'reqlExpressions': {'boolean': 'true','number': 'if (\'answer\' > 0) then 1 else 2','string': '"test"'}});
+    env.client.send(req,((err,res) => {
+      if(err) {
+        assert.fail();
       }
       else {
         done();

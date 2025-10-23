@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,8 +25,8 @@ describe('UpdateMoreItems', function(){
     req = new rqs.UpdateMoreItems('\'int_property\' == 42',{'int_property': 77});
     env.client.send(req)
     .then((res) => {
-      chai.equal(res['itemIds'].length, 1);
-      chai.deepEqual(1, res['count']);
+      assert.equal(res['itemIds'].length, 1);
+      assert.deepEqual(1, res['count']);
       done();
     });
   });

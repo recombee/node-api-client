@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,7 +25,7 @@ describe('AddCartAddition', function(){
     req = new rqs.AddCartAddition('u_id','i_id',{'cascadeCreate': true,'additionalData': {'answer': 42}});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -38,7 +38,7 @@ describe('AddCartAddition', function(){
     req = new rqs.AddCartAddition('entity_id','entity_id');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -51,7 +51,7 @@ describe('AddCartAddition', function(){
     req = new rqs.AddCartAddition('entity_id','entity_id',{'timestamp': '2013-10-29T09:38:41.341Z'});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         done();
@@ -64,12 +64,12 @@ describe('AddCartAddition', function(){
     req = new rqs.AddCartAddition('entity_id','nonex_id');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 404);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });
@@ -79,12 +79,12 @@ describe('AddCartAddition', function(){
     req = new rqs.AddCartAddition('nonex_id','entity_id');
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 404);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 404);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });
@@ -94,17 +94,17 @@ describe('AddCartAddition', function(){
     req = new rqs.AddCartAddition('u_id2','i_id2',{'cascadeCreate': true,'timestamp': 5});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.equal(err.name, 'ResponseError');
-            chai.equal(err.statusCode, 409);
+            assert.equal(err.name, 'ResponseError');
+            assert.equal(err.statusCode, 409);
             done();
           }
           else {
-            chai.fail();
+            assert.fail();
           }
         }));
       }

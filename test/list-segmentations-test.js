@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -28,7 +28,7 @@ describe('ListSegmentations', function(){
       req = new rqs.ListSegmentations('items');
       env.client.send(req)
       .then((res) => {
-        chai.equal(res['segmentations'].length, 1);
+        assert.equal(res['segmentations'].length, 1);
         done();
       });
     });

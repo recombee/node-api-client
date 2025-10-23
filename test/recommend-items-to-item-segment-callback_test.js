@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -25,12 +25,12 @@ describe('RecommendItemsToItemSegment', function(){
     req = new rqs.RecommendItemsToItemSegment('segment_id','entity_id',5,{'scenario': 'scenario1','cascadeCreate': true});
     env.client.send(req,((err,res) => {
       if(err) {
-        chai.equal(err.name, 'ResponseError');
-        chai.equal(err.statusCode, 400);
+        assert.equal(err.name, 'ResponseError');
+        assert.equal(err.statusCode, 400);
         done();
       }
       else {
-        chai.fail();
+        assert.fail();
       }
     }));
   });

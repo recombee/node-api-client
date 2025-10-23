@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -26,23 +26,23 @@ describe('RecommendNextItems', function(){
     req2 = new rqs.RecommendItemsToUser('entity_id',3,{'returnProperties': true});
     env.client.send(req2,((err,res) => {
       if(err) {
-        chai.fail();
+        assert.fail();
       }
       else {
         req = new rqs.RecommendNextItems(res['recommId'],3);
         env.client.send(req,((err,res) => {
           if(err) {
-            chai.fail();
+            assert.fail();
           }
           else {
-            chai.equal(res['recomms'].length, 3);
+            assert.equal(res['recomms'].length, 3);
             req = new rqs.RecommendNextItems(res['recommId'],3);
             env.client.send(req,((err,res) => {
               if(err) {
-                chai.fail();
+                assert.fail();
               }
               else {
-                chai.equal(res['recomms'].length, 3);
+                assert.equal(res['recomms'].length, 3);
                 done();
               }
             }));

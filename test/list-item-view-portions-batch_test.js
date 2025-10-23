@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -27,10 +27,10 @@ describe('ListItemViewPortions', function(){
     
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-        chai.equal(responses[0].code, 200);
-        chai.equal(responses[0].json.length, 1);
-        chai.deepEqual('item', responses[0].json[0]['itemId']);
-        chai.deepEqual('user', responses[0].json[0]['userId']);
+        assert.equal(responses[0].code, 200);
+        assert.equal(responses[0].json.length, 1);
+        assert.deepEqual('item', responses[0].json[0]['itemId']);
+        assert.deepEqual('user', responses[0].json[0]['userId']);
       done();
     });
   });

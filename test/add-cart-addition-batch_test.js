@@ -3,7 +3,7 @@
 */
 
 'use strict'
-var chai = require('chai').assert;
+var assert = require('chai').assert;
 var recombee = require('./../index.js');
 var rqs = recombee.requests;
 
@@ -32,13 +32,13 @@ describe('AddCartAddition', function(){
     
     env.client.send(new rqs.Batch(requests))
     .then((responses) => {
-        chai.equal(responses[0].code, 200);
-        chai.equal(responses[1].code, 200);
-        chai.equal(responses[2].code, 200);
-        chai.equal(responses[3].code, 404);
-        chai.equal(responses[4].code, 404);
-        chai.equal(responses[5].code, 200);
-        chai.equal(responses[6].code, 409);
+        assert.equal(responses[0].code, 200);
+        assert.equal(responses[1].code, 200);
+        assert.equal(responses[2].code, 200);
+        assert.equal(responses[3].code, 404);
+        assert.equal(responses[4].code, 404);
+        assert.equal(responses[5].code, 200);
+        assert.equal(responses[6].code, 409);
       done();
     });
   });
