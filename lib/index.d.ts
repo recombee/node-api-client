@@ -2404,6 +2404,8 @@ declare module "recombee-api-client" {
           expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended Item Segment. */
+          reqlExpressions?: Record<string, string>;
         }
       );
 
@@ -2416,6 +2418,7 @@ declare module "recombee-api-client" {
       logic?: string | object;
       expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
+      reqlExpressions?: Record<string, string>;
       protected __response_type: RecommendationResponse;
 
       bodyParameters(): {
@@ -2427,6 +2430,7 @@ declare module "recombee-api-client" {
         logic?: string | object;
         expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
+        reqlExpressions?: Record<string, string>;
       };
 
       queryParameters(): {
@@ -2482,6 +2486,8 @@ declare module "recombee-api-client" {
           expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended Item Segment. */
+          reqlExpressions?: Record<string, string>;
         }
       );
 
@@ -2495,6 +2501,7 @@ declare module "recombee-api-client" {
       logic?: string | object;
       expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
+      reqlExpressions?: Record<string, string>;
       protected __response_type: RecommendationResponse;
 
       bodyParameters(): {
@@ -2507,6 +2514,7 @@ declare module "recombee-api-client" {
         logic?: string | object;
         expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
+        reqlExpressions?: Record<string, string>;
       };
 
       queryParameters(): {
@@ -2561,6 +2569,8 @@ declare module "recombee-api-client" {
           expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended Item Segment. */
+          reqlExpressions?: Record<string, string>;
         }
       );
 
@@ -2574,6 +2584,7 @@ declare module "recombee-api-client" {
       logic?: string | object;
       expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
+      reqlExpressions?: Record<string, string>;
       protected __response_type: RecommendationResponse;
 
       bodyParameters(): {
@@ -2587,6 +2598,7 @@ declare module "recombee-api-client" {
         logic?: string | object;
         expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
+        reqlExpressions?: Record<string, string>;
       };
 
       queryParameters(): {
@@ -2788,6 +2800,8 @@ declare module "recombee-api-client" {
           expertSettings?: Record<string, unknown>;
           /** If there is a custom AB-testing running, return the name of the group to which the request belongs. */
           returnAbGroup?: boolean;
+          /** A dictionary of [ReQL](https://docs.recombee.com/reql) expressions that will be executed for each recommended Item Segment. */
+          reqlExpressions?: Record<string, string>;
         }
       );
 
@@ -2801,6 +2815,7 @@ declare module "recombee-api-client" {
       logic?: string | object;
       expertSettings?: Record<string, unknown>;
       returnAbGroup?: boolean;
+      reqlExpressions?: Record<string, string>;
       protected __response_type: SearchResponse;
 
       bodyParameters(): {
@@ -2813,6 +2828,7 @@ declare module "recombee-api-client" {
         logic?: string | object;
         expertSettings?: Record<string, unknown>;
         returnAbGroup?: boolean;
+        reqlExpressions?: Record<string, string>;
       };
 
       queryParameters(): {
