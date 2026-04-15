@@ -168,6 +168,8 @@ declare module "recombee-api-client" {
         statusCode: number,
         message: string
       );
+
+      public readonly statusCode: number;
     }
 
     /**
@@ -2606,7 +2608,43 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Composite Recommendation returns both a *source entity* (e.g., an Item or [Item Segment](https://docs.recombee.com/segmentations.html)) and a list of related recommendations in a single response.
+     * Returns Item segments that shall be shown to a user as next recommendations when the user e.g. scrolls the page down (*infinite scroll*) or goes to the next page.
+     * It accepts `recommId` of a base recommendation request (e.g., request from the first page) and the number of segments that shall be returned (`count`).
+     * The base request can be one of:
+     *   - [Recommend Item Segments to Item](https://docs.recombee.com/api#recommend-item-segments-to-item)
+     *   - [Recommend Item Segments to User](https://docs.recombee.com/api#recommend-item-segments-to-user)
+     *   - [Recommend Item Segments to Item Segment](https://docs.recombee.com/api#recommend-item-segments-to-item-segment)
+     *   - [Search Item Segments](https://docs.recombee.com/api#search-item-segments)
+     * All the other parameters are inherited from the base request.
+     * *Recommend next Item segments* can be called many times for a single `recommId` and each call returns different (previously not recommended) segments.
+     * The number of *Recommend next Item segments* calls performed so far is returned in the `numberNextRecommsCalls` field.
+     * *Recommend next Item segments* can be requested up to 30 minutes after the base request or a previous *Recommend next Item segments* call.
+     * For billing purposes, each call to *Recommend next Item segments* is counted as a separate recommendation request.
+     */
+    export class RecommendNextItemSegments extends requests.Request {
+      /**
+       * @param recommId - ID of the base recommendation request for which next recommendations should be returned
+       * @param count - Number of item segments to be recommended
+       */
+      constructor(
+        recommId: string,
+        count: number,
+      );
+
+      recommId: string;
+      count: number;
+      protected __response_type: RecommendationResponse;
+
+      bodyParameters(): {
+        count: number;
+      };
+
+      queryParameters(): {
+      };
+    }
+
+    /**
+     * Composite Recommendation returns both a *source entity* (e.g., an Item or [Item Segment](https://docs.recombee.com/segmentations)) and a list of related recommendations in a single response.
      * It is ideal for use cases such as personalized homepage sections (*Articles from <category>*), *Because You Watched <movie>*, or *Artists Related to Your Favorite Artist <artist>*.
      * See detailed **examples and configuration guidance** in the [Composite Scenarios documentation](https://docs.recombee.com/scenarios#composite-recommendations).
      * **Structure**
@@ -2645,6 +2683,8 @@ declare module "recombee-api-client" {
           logic?: string | object;
           /** ID of the segment from `contextSegmentationId` for which the recommendations are to be generated. */
           segmentId?: string;
+          /** Search query provided by the user. It is used for the full-text search. Only applicable if the *scenario* corresponds to a search scenario. */
+          searchQuery?: string;
           /** If the entity for the source recommendation does not exist in the database, returns a list of non-personalized recommendations and creates the user in the database. This allows, for example, rotations in the following recommendations for that entity, as the entity will be already known to the system. */
           cascadeCreate?: boolean;
           /** Parameters applied for recommending the *Source* stage. The accepted parameters correspond with the recommendation sub-endpoint used to recommend the *Source*. */
@@ -2662,6 +2702,7 @@ declare module "recombee-api-client" {
       userId?: string;
       logic?: string | object;
       segmentId?: string;
+      searchQuery?: string;
       cascadeCreate?: boolean;
       sourceSettings?: Record<string, unknown>;
       resultSettings?: Record<string, unknown>;
@@ -2675,6 +2716,7 @@ declare module "recombee-api-client" {
         userId?: string;
         logic?: string | object;
         segmentId?: string;
+        searchQuery?: string;
         cascadeCreate?: boolean;
         sourceSettings?: Record<string, unknown>;
         resultSettings?: Record<string, unknown>;

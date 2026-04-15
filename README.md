@@ -37,14 +37,12 @@ const client = new ApiClient(
 
 const request = new requests.ListUsers({ count: 10 });
 
-client
-	.send(request)
-	.then((result) => {
-		console.log(result);
-	})
-	.catch((error) => {
-		console.error(error);
-	});
+try {
+	const result = await client.send(request);
+	console.log(result);
+} catch (error) {
+	console.error(error);
+}
 ```
 
 ```javascript
@@ -89,12 +87,12 @@ async function example() {
 	const response = await client.send(
 		new requests.RecommendItemsToUser("user-25", 5)
 	);
-	console.log("Recommended items for user-25: %j", response.recomms);
+	console.log("Recommended items for user-25:", response.recomms);
 	// User scrolled down - get next 3 recommended items
 	const response2 = await client.send(
 		new requests.RecommendNextItems(response.recommId, 3)
 	);
-	console.log("Next recommended items for user-25: %j", response2.recomms);
+	console.log("Next recommended items for user-25:", response2.recomms);
 }
 
 example();
@@ -121,137 +119,107 @@ const NUM = 100;
 //   - image (url of computer's photo)
 
 // Add properties of items
-client
-	.send(
-		new rqs.Batch([
-			new rqs.AddItemProperty("price", "double"),
-			new rqs.AddItemProperty("num-cores", "int"),
-			new rqs.AddItemProperty("description", "string"),
-			new rqs.AddItemProperty("time", "timestamp"),
-			new rqs.AddItemProperty("image", "image"),
-		])
-	)
-	.then((responses) => {
-		//Prepare requests for setting a catalog of computers
+await client.send(
+	new rqs.Batch([
+		new rqs.AddItemProperty("price", "double"),
+		new rqs.AddItemProperty("num-cores", "int"),
+		new rqs.AddItemProperty("description", "string"),
+		new rqs.AddItemProperty("time", "timestamp"),
+		new rqs.AddItemProperty("image", "image"),
+	])
+);
 
-		var requests = Array.apply(0, Array(NUM)).map((_, i) => {
-			return new rqs.SetItemValues(
-				`computer-${i}`, //itemId
-				//values:
-				{
-					price: 600 + 400 * Math.random(),
-					"num-cores": Math.floor(Math.random() * 8) + 1,
-					description: "Great computer",
-					time: new Date().toISOString(),
-					image: `http://examplesite.com/products/computer-${i}.jpg`,
-				},
-				//optional parameters:
-				{
-					cascadeCreate: true, // Use cascadeCreate for creating item
-					// with given itemId, if it doesn't exist
-				}
-			);
-		});
-		//Send catalog to the recommender system
-		return client.send(new rqs.Batch(requests));
-	})
-	.then((responses) => {
-		// Generate some random purchases of items by users
-		const userIds = Array.apply(0, Array(NUM)).map((_, i) => {
-			return `user-${i}`;
-		});
-		const itemIds = Array.apply(0, Array(NUM)).map((_, i) => {
-			return `computer-${i}`;
-		});
 
-		// Generate some random purchases of items by users
-		const PROBABILITY_PURCHASED = 0.1;
-		const purchases = [];
-		userIds.forEach((userId) => {
-			const purchased = itemIds.filter(
-				() => Math.random() < PROBABILITY_PURCHASED
-			);
-			purchased.forEach((itemId) => {
-				purchases.push(
-					new rqs.AddPurchase(userId, itemId, { cascadeCreate: true })
-				);
-			});
-		});
-		// Send purchases to the recommender system
-		return client.send(new rqs.Batch(purchases));
-	})
-	.then((responses) => {
-		// Get 5 recommendations for user-42, who is currently viewing computer-6
-		// Recommend only computers that have at least 3 cores
-		return client.send(
-			new rqs.RecommendItemsToItem("computer-6", "user-42", 5, {
-				filter: "'num-cores' >= 3",
-			})
-		);
-	})
-	.then((recommended) => {
-		console.log(
-			"Recommended items with at least 3 processor cores: %j",
-			recommended
-		);
-
-		// Recommend only items that are more expensive then currently viewed item (up-sell)
-		return client.send(
-			new rqs.RecommendItemsToItem("computer-6", "user-42", 5, {
-				filter: " 'price' > context_item[\"price\"] ",
-				returnProperties: true,
-			})
-		);
-	})
-	.then((recommended) => {
-		console.log("Recommended up-sell items: %j", recommended);
-
-		// Filters, boosters and other settings can be set also in the Admin UI (admin.recombee.com)
-		// when scenario is specified
-		return client.send(
-			new rqs.RecommendItemsToItem("computer-6", "user-42", 5, {
-				scenario: "product_detail",
-			})
-		);
-	})
-	.then((recommended) => {
-		// Perform personalized full-text search with a user's search query (e.g. "computers")
-		return client.send(
-			new rqs.SearchItems("user-42", "computers", 5, {
-				scenario: "search_top",
-			})
-		);
-	})
-	.then((matched) => {
-		console.log("Matched items: %j", matched);
-	})
-	.catch((error) => {
-		console.error(error);
-		// Use fallback
-	});
-```
-
-## Promises / callbacks
-
-The SDK supports both Promises and callbacks, so you can choose the way which suits your coding style and conventions of your project:
-
-```javascript
-// Using Promises
-await client.send(new ListUsers());
-// or
-client
-	.send(new ListUsers())
-	.then((response) => {
-		// handle response
-	})
-	.catch((error) => {
-		// handle error
-	});
-
-// Using callbacks
-client.send(new ListUsers(), (error, response) => {
-	// handle result
+// Prepare requests for setting a catalog of computers
+var requests = Array.apply(0, Array(NUM)).map((_, i) => {
+	return new rqs.SetItemValues(
+		`computer-${i}`, // itemId
+		// values:
+		{
+			price: 600 + 400 * Math.random(),
+			"num-cores": Math.floor(Math.random() * 8) + 1,
+			description: "Great computer",
+			time: new Date().toISOString(),
+			image: `http://examplesite.com/products/computer-${i}.jpg`,
+		},
+		// optional parameters:
+		{
+			cascadeCreate: true, // Use cascadeCreate for creating item
+			// with given itemId, if it doesn't exist
+		}
+	);
 });
+
+// Send catalog to the recommender system
+await client.send(new rqs.Batch(requests));
+
+
+// Generate some random purchases of items by users
+const userIds = Array.apply(0, Array(NUM)).map((_, i) => {
+	return `user-${i}`;
+});
+const itemIds = Array.apply(0, Array(NUM)).map((_, i) => {
+	return `computer-${i}`;
+});
+
+// Generate some random purchases of items by users
+const PROBABILITY_PURCHASED = 0.1;
+const purchases = [];
+userIds.forEach((userId) => {
+	const purchased = itemIds.filter(
+		() => Math.random() < PROBABILITY_PURCHASED
+	);
+	purchased.forEach((itemId) => {
+		purchases.push(
+			new rqs.AddPurchase(userId, itemId, { cascadeCreate: true })
+		);
+	});
+});
+// Send purchases to the recommender system
+await client.send(new rqs.Batch(purchases));
+
+// Get 5 recommendations for user-42, who is currently viewing computer-6
+// Recommend only computers that have at least 3 cores
+const recommended = await client.send(
+	new rqs.RecommendItemsToItem("computer-6", "user-42", 5, {
+		filter: "'num-cores' >= 3",
+	})
+);
+console.log(
+	"Recommended items with at least 3 processor cores:",
+	recommended
+);
+
+// Recommend only items that are more expensive then currently viewed item (up-sell)
+const upsell = await client.send(
+	new rqs.RecommendItemsToItem("computer-6", "user-42", 5, {
+		filter: " 'price' > context_item[\"price\"] ",
+		returnProperties: true,
+	})
+);
+console.log("Recommended up-sell items:", upsell);
+
+// Filters, boosters and other settings can be set also in the Admin UI (admin.recombee.com)
+// when scenario is specified
+const productDetail = await client.send(
+	new rqs.RecommendItemsToItem("computer-6", "user-42", 5, {
+		scenario: "product_detail",
+	})
+);
+console.log("Recommended items for product detail scenario:", productDetail);
+
+// Perform personalized full-text search with a user's search query (e.g. "computers")
+try {
+	const searchResults = await client.send(
+		new rqs.SearchItems("user-42", "computers", 5, {
+			scenario: "search_top",
+		})
+	);
+	console.log("Matched items:", searchResults);
+} catch (error) {
+	console.error(error);
+	// use fallback...
+}
 ```
 
 ## Errors handling
