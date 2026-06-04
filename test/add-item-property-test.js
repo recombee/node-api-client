@@ -69,4 +69,45 @@ describe('AddItemProperty', function(){
       });
     });
   });
+  
+  it ('does not fail with valid property role and metadata', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddItemProperty('title','string',{'role': 'title'});
+    env.client.send(req)
+    .then((res) => {
+      done();
+    });
+  });
+  
+  it ('fails with duplicate property role or invalid metadata', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddItemProperty('str4','string',{'role': 'summary'});
+    env.client.send(req)
+    .then((res) => {
+      env.client.send(req)
+      .then((res) => {
+        assert.fail();
+        req = new rqs.AddItemProperty('str5','string',{'role': 'titl'});
+      env.client.send(req)
+      .then((res) => {
+        assert.fail();
+        done();
+      })
+      .catch((err) => {
+        if (err instanceof recombee.errors.ResponseError) {
+          assert.equal(err.statusCode, 404);
+          done();
+        }
+        throw err;
+      });
+      })
+      .catch((err) => {
+        if (err instanceof recombee.errors.ResponseError) {
+          assert.equal(err.statusCode, 409);
+          done();
+        }
+        throw err;
+      });
+    });
+  });
 });

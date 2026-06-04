@@ -296,9 +296,21 @@ declare module "recombee-api-client" {
     values?: Record<string, EntityProperty>;
   }
 
+  export type PropertyRole = {
+    name: string;
+    settings?: Record<string, unknown>;
+  }
+
+  export type PropertyMetadata = {
+    name: string;
+    settings?: Record<string, unknown>;
+  }
+
   export type PropertyInfo = {
     name: string;
     type: string;
+    role?: PropertyRole;
+    metadata?: PropertyMetadata[];
   }
 
   export type UpdateMoreItemsResponse = {
@@ -563,29 +575,40 @@ declare module "recombee-api-client" {
       /**
        * @param propertyName - Name of the item property to be created. Currently, the following names are reserved: `id`, `itemid`, case-insensitively. Also, the length of the property name must not exceed 63 characters.
        * @param type - Value type of the item property to be created. One of: `int`, `double`, `string`, `boolean`, `timestamp`, `set`, `image` or `imageList`.
-       * * `int`- Signed integer number.
+       * * `int` - Signed integer number.
        * * `double` - Floating point number. It uses 64-bit base-2 format (IEEE 754 standard).
        * * `string` - UTF-8 string.
        * * `boolean` - *true* / *false*
-       * * `timestamp` - Value representing date and time.
+       * * `timestamp` - Value representing date and time. ISO8601-1 pattern (string) or UTC epoch time (number).
        * * `set` - Set of strings.
        * * `image` - URL of an image (`jpeg`, `png` or `gif`).
-       * * `imageList` - List of URLs that refer to images. 
+       * * `imageList` - List of URLs that refer to images.
+       * @param optional - Optional parameters given as an object.
        */
       constructor(
         propertyName: string,
         type: string,
+        optional?: {
+          /** [Role](https://docs.recombee.com/api/property_roles_metadata#roles) to assign to the property. */
+          role?: string | object;
+          /** List of [metadata](https://docs.recombee.com/api/property_roles_metadata#metadata) entries to assign to the property. */
+          metadata?: string[];
+        }
       );
 
       propertyName: string;
       type: string;
+      role?: string | object;
+      metadata?: string[];
       protected __response_type: string;
 
       bodyParameters(): {
+        type: string;
+        role?: string | object;
+        metadata?: string[];
       };
 
       queryParameters(): {
-        type: string;
       };
     }
 
@@ -1022,23 +1045,34 @@ declare module "recombee-api-client" {
        * * `double` - Floating point number. It uses 64-bit base-2 format (IEEE 754 standard).
        * * `string` - UTF-8 string.
        * * `boolean` - *true* / *false*
-       * * `timestamp` - Value representing date and time.
+       * * `timestamp` - Value representing date and time. ISO8601-1 pattern (string) or UTC epoch time (number).
        * * `set` - Set of strings.
+       * @param optional - Optional parameters given as an object.
        */
       constructor(
         propertyName: string,
         type: string,
+        optional?: {
+          /** [Role](https://docs.recombee.com/api/property_roles_metadata#roles) to assign to the property. */
+          role?: string | object;
+          /** List of [metadata](https://docs.recombee.com/api/property_roles_metadata#metadata) entries to assign to the property. */
+          metadata?: string[];
+        }
       );
 
       propertyName: string;
       type: string;
+      role?: string | object;
+      metadata?: string[];
       protected __response_type: string;
 
       bodyParameters(): {
+        type: string;
+        role?: string | object;
+        metadata?: string[];
       };
 
       queryParameters(): {
-        type: string;
       };
     }
 
@@ -2608,18 +2642,18 @@ declare module "recombee-api-client" {
     }
 
     /**
-     * Returns Item segments that shall be shown to a user as next recommendations when the user e.g. scrolls the page down (*infinite scroll*) or goes to the next page.
-     * It accepts `recommId` of a base recommendation request (e.g., request from the first page) and the number of segments that shall be returned (`count`).
+     * Returns [Item Segments](https://docs.recombee.com/segmentations) to be shown as the next recommendations when a user scrolls (e.g., within a carousel or feed of Item Segments such as brands, artists, topics, or categories).
+     * The request requires the `recommId` of a base recommendation request and the number of Segments to return (`count`).
      * The base request can be one of:
      *   - [Recommend Item Segments to Item](https://docs.recombee.com/api#recommend-item-segments-to-item)
      *   - [Recommend Item Segments to User](https://docs.recombee.com/api#recommend-item-segments-to-user)
      *   - [Recommend Item Segments to Item Segment](https://docs.recombee.com/api#recommend-item-segments-to-item-segment)
      *   - [Search Item Segments](https://docs.recombee.com/api#search-item-segments)
-     * All the other parameters are inherited from the base request.
-     * *Recommend next Item segments* can be called many times for a single `recommId` and each call returns different (previously not recommended) segments.
-     * The number of *Recommend next Item segments* calls performed so far is returned in the `numberNextRecommsCalls` field.
-     * *Recommend next Item segments* can be requested up to 30 minutes after the base request or a previous *Recommend next Item segments* call.
-     * For billing purposes, each call to *Recommend next Item segments* is counted as a separate recommendation request.
+     * All other parameters are inherited from the base request associated with the provided `recommId`.
+     * This endpoint can be called multiple times for a single `recommId`. Each call returns different Item Segments that have not been recommended in previous calls.
+     * The number of calls made so far is returned in the `numberNextRecommsCalls` field.
+     * Requests can be made up to 30 minutes after the base request or the most recent Recommend Next Item Segments call.
+     * For billing purposes, each call to this endpoint is counted as a separate recommendation request.
      */
     export class RecommendNextItemSegments extends requests.Request {
       /**

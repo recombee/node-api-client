@@ -77,4 +77,49 @@ describe('AddItemProperty', function(){
       }
     }));
   });
+  
+  it ('does not fail with valid property role and metadata', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddItemProperty('title','string',{'role': 'title'});
+    env.client.send(req,((err,res) => {
+      if(err) {
+        assert.fail();
+      }
+      else {
+        done();
+      }
+    }));
+  });
+  
+  it ('fails with duplicate property role or invalid metadata', (done) => {
+    let req, req2, resp;
+    req = new rqs.AddItemProperty('str4','string',{'role': 'summary'});
+    env.client.send(req,((err,res) => {
+      if(err) {
+        assert.fail();
+      }
+      else {
+        env.client.send(req,((err,res) => {
+          if(err) {
+            assert.equal(err.name, 'ResponseError');
+            assert.equal(err.statusCode, 409);
+            req = new rqs.AddItemProperty('str5','string',{'role': 'titl'});
+            env.client.send(req,((err,res) => {
+              if(err) {
+                assert.equal(err.name, 'ResponseError');
+                assert.equal(err.statusCode, 404);
+                done();
+              }
+              else {
+                assert.fail();
+              }
+            }));
+          }
+          else {
+            assert.fail();
+          }
+        }));
+      }
+    }));
+  });
 });

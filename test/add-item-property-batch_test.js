@@ -25,7 +25,11 @@ describe('AddItemProperty', function(){
       new rqs.AddItemProperty('str','string'),
       new rqs.AddItemProperty('prop','integer'),
       new rqs.AddItemProperty('number2','int'),
-      new rqs.AddItemProperty('number2','int')
+      new rqs.AddItemProperty('number2','int'),
+      new rqs.AddItemProperty('title','string',{'role': 'title'}),
+      new rqs.AddItemProperty('str4','string',{'role': 'summary'}),
+      new rqs.AddItemProperty('str4','string',{'role': 'summary'}),
+      new rqs.AddItemProperty('str5','string',{'role': 'titl'})
       ];
     
     env.client.send(new rqs.Batch(requests))
@@ -35,6 +39,10 @@ describe('AddItemProperty', function(){
         assert.equal(responses[2].code, 400);
         assert.equal(responses[3].code, 201);
         assert.equal(responses[4].code, 409);
+        assert.equal(responses[5].code, 201);
+        assert.equal(responses[6].code, 201);
+        assert.equal(responses[7].code, 409);
+        assert.equal(responses[8].code, 404);
       done();
     });
   });
